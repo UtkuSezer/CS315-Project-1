@@ -28,7 +28,6 @@ min_stmt		min
 underscore		\_
 
 newline			\n
-tab			\t
 true_bool		true
 false_bool		false
 
@@ -44,8 +43,8 @@ identifier		{lower_letter}({letter}|{digit}|{underscore})*
 
 string_stmt 		\"(.)*\"
 bool_stmt		{true_bool}|{false_bool}
-int_stmt		{digit}+
-double_stmt 		{digit}*(\.)?{digit}+
+int_stmt		[+-]?{digit}+
+double_stmt 		[+-]?{digit}*(\.)?{digit}+
 char_stmt		\'[^\\\']\'
 %%
 \!			printf("NOT ");
@@ -77,7 +76,6 @@ char_stmt		\'[^\\\']\'
 {begin_word}		printf("BEGIN ");
 {end_word}		printf("END ");
 {newline}       	printf("NEW_LINE \n");
-{tab}			printf("TAB ");
 {underscore}		printf("UNDERSCORE ");
 {input_stmt}		printf("EGG_IN ");
 {output_stmt}		printf("EGG_OUT ");
