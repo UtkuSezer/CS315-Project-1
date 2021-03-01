@@ -2,6 +2,8 @@
 hashtag 		\#
 double_hashtag		\#\#
 main_word		funct\_main
+begin_word		begin
+end_word		end
 function		funct\_{identifier}
 void_return		void
 int_type		int
@@ -72,6 +74,8 @@ char_stmt		\'[^\\\']\'
 \&			printf("AND ");
 \|			printf("OR ");
 {main_word}		printf("MAIN ");
+{begin_word}		printf("BEGIN ");
+{end_word}		printf("END ");
 {newline}       	printf("NEW_LINE \n");
 {tab}			printf("TAB ");
 {underscore}		printf("UNDERSCORE ");

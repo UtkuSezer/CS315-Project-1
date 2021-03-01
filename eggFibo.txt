@@ -1,3 +1,5 @@
+begin
+
 # 
 Fibonacci Calculator
 		by Apocalyptic Games
@@ -99,3 +101,5 @@ int funct_main(){
 
 	eggout("Bye " + name + "!" );
 }
+
+end
