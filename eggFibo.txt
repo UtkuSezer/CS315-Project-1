@@ -60,7 +60,7 @@ int funct_main(){
 	maxNumb = max(numb1, numb2);
 	minNumb = min(numb1, numb2);
 	eggout("Max: " + maxNumb + " Min: " + minNumb + \n );
-	powResult = pow(maxNumb , minNumb)
+	powResult = pow(maxNumb , minNumb);
 	eggout("Max^Min: " + powResult + \n );
 	eggout("-------------------------------------------------" + \n);
 	
