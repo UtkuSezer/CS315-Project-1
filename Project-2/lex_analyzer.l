@@ -1,3 +1,9 @@
+%{
+#include <stdio.h>
+#include "y.tab.h"
+void yyerror(char *);
+%}
+
 hashtag 		\#
 double_hashtag		\#\#
 main_word		main
@@ -52,6 +58,8 @@ bool_stmt		{true_bool}|{false_bool}
 int_stmt		[+-]?{digit}+
 double_stmt 		[+-]?{digit}*(\.)?{digit}+
 char_stmt		\'[^\\\']\'
+
+%option yylineno
 %%
 \!			return("NOT ");
 \(            		return("LP ");
@@ -125,3 +133,8 @@ char_stmt		\'[^\\\']\'
 {comment}		return("COMMENT ");
 {line_comment}		return("LINE_COMMENT ");
 .	          	;
+%%
+
+int yywrap(void){
+	return 1;
+}
