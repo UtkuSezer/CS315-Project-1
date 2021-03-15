@@ -120,6 +120,7 @@ int main(){
 		## If hero wants to go down stage
 		if( (direction == "down") & (((PLAYERX == 5) | (PLAYERY == 2)) | ((PLAYERY == 3) & (PLAYERX == 3)) | ((PLAYERY == 4) & (PLAYERX == 5 | PLAYERX == 2)) | ((PLAYERY == 5) & (PLAYERX == 4)) | ((PLAYERY == 6) & (PLAYERX == 2))) ){
 			
+			move(SOUTH);
 			eggout("Your stage: " + PLAYERY + \n);
 			eggout("Your block: " + PLAYERX + \n);
 
