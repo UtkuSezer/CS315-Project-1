@@ -123,8 +123,7 @@ char_stmt		\'[^\\\']\'
 {max_stmt}		return("MAX");
 {min_stmt}		return("MIN");
 {sqrt_stmt}		return("SQUARE_ROOT");
-{true_bool}		return("TRUE");
-{false_bool}		return("FALSE");
+{bool_stmt}		return("BOOL_STMT");
 {string_stmt} 		return("STRING_STMT");
 {const_identifier}	return("CONST");
 {int_stmt}		return("INT_STMT");
