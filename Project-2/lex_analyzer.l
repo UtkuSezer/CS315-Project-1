@@ -83,8 +83,9 @@ char_stmt		\'[^\\\']\'
 \'            		return("CHAR_IDENTIFIER");
 \+        		return("PLUS");
 \-        		return("MINUS");
-\*			return("MULTIPLY");
-\%			return("PERCENT");
+\*			return("MULTIPLY_OP");
+\/			return("DIVIDE_OP");
+\%			return("MOD_OP");
 \>			return("GT");
 \<			return("LT");
 \<\=			return("LTE");
