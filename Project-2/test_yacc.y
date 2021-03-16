@@ -6,7 +6,8 @@ void yyerror(char* s);
 extern int yylineno;
 %}
 
-%token  NOT
+%token NOT
+%token CALL
 %token LP
 %token RP
 %token LCB
@@ -83,7 +84,7 @@ extern int yylineno;
 program:
 	BEGIN stmts END
 stmts:
-	stmt | stmt SEMICOLON stmts
+	stmt | stmt stmts
 stmt:
 	matched_stmt SEMICOLON
 | unmatched_stmt SEMICOLON
@@ -150,11 +151,8 @@ recursive_expression logical_connector single_expression
 | single_expression
 term:
 	var
-| constant
 var:
 IDENTIFIER
-constant: 
-	var
 logical_connector:
 AND
 | OR
@@ -206,7 +204,7 @@ POW LP INT_STMT COMMA INT_STMT RP
 | POW LP DOUBLE_STMT COMMA DOUBLE_STMT RP
 
 constant_identifier:
-	CONST
+	CONST term
 sign:
 	PLUS 
 | MINUS
@@ -227,15 +225,14 @@ declaration:
 types:
 	INT | DOUBLE | STRING | CHAR | BOOL
 function_call:
-	function_name LP IDENTIFIER RP SEMICOLON
-funct_name:
-	IDENTIFIER
+	CALL IDENTIFIER LP IDENTIFIER RP SEMICOLON
 function_types:
 types | VOID
 initialization : 
 term assignment_operator assignment_values SEMICOLON
 declaration_and_initilization:
 	types term assignment_operator assignment_values SEMICOLON
+	| types constant_identifier SEMICOLON
 
 assignment_operator: 
 ASSIGN_OP
@@ -268,15 +265,13 @@ term
 | assignment_values PLUS output_context
 
 function_declaration:
-function_types function_name LP parameter RP LCB stmts RCB 
-| function_types function_name LP parameter RP LCB stmts RETURN assignment_values RCB 
-| function_types function_name LP parameter RP LCB stmts RETURN VOID RCB
+function_types IDENTIFIER LP parameter RP LCB stmts RCB 
+| function_types IDENTIFIER LP parameter RP LCB stmts RETURN assignment_values RCB 
+| function_types IDENTIFIER LP parameter RP LCB stmts RETURN VOID RCB
 
-function_name:
-IDENTIFIER
 parameter:
 	parameter COMMA types IDENTIFIER
-| types IDENTIFIER|
+| types IDENTIFIER
 
 %%
 void yyerror(char* s) {
