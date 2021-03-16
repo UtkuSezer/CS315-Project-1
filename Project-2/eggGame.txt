@@ -1,5 +1,3 @@
-begin
-
 # Action-RPG Game
   Apocalyptic Games Presents
   "How I Met Your Princess?"
@@ -41,19 +39,19 @@ void buyItems( int whealth, int heroDamage){
 		whealth = whealth - 15;
 		damage = damage + 10;
 	}
-	elif(itemNo == 2 & whealth < 10){ 
+	if(itemNo == 2 & whealth < 10){ 
 		whealth = whealth - 10;
 		damage = damage + 5;
 	}
-	elif(itemNo == 3 & whealth < 20){ 
+	if(itemNo == 3 & whealth < 20){ 
 		whealth = whealth - 20;
 		damage = damage + 15;
 	}
-	elif(itemNo == 4 & whealth < 20) { 
+	if(itemNo == 4 & whealth < 20) { 
 		whealth = whealth - 20;
 		damage = damage + 15;
 	}
-	elif(itemNo < 1 & itemNo > 4){
+	if(itemNo < 1 & itemNo > 4){
 		eggout("Invalid item index. You can't buy anything..." + \n);
 	}
 	else{
@@ -164,5 +162,3 @@ int main(){
 
 	return 0;
 }
-
-end

@@ -1,14 +1,11 @@
 %{
 #include <stdio.h>
-#include "y.tab.h"
 void yyerror(char *);
 %}
 
 hashtag 		\#
 double_hashtag		\#\#
 main_word		main
-begin_word		begin
-end_word		end
 call_word		call
 south_word		SOUTH
 north_word		NORTH
@@ -26,7 +23,6 @@ const_identifier	const
 type			bool_type|char_type|string_type|double_type|int_type
 if_stmt			if
 else_stmt		else
-elif_stmt		elif
 for_stmt		for
 while_stmt		while
 do_stmt			do
@@ -101,8 +97,6 @@ char_stmt		\'[^\\\']\'
 {west_word}		return("WEST");
 {playerx_word}		return("PLAYERX");
 {playery_word}		return("PLAYERY");
-{begin_word}		return("BEGIN");
-{end_word}		return("END");
 {move_stmt}		return("MOVE");
 {newline}       	return("NEW_LINE");
 {underscore}		return("UNDERSCORE");
@@ -115,7 +109,6 @@ char_stmt		\'[^\\\']\'
 {bool_type}		return("BOOL");
 {if_stmt}		return("IF");
 {else_stmt}		return("ELSE");
-{elif_stmt}		return("ELIF");
 {for_stmt}		return("FOR");
 {while_stmt}		return("WHILE");
 {do_stmt}		return("DO");
