@@ -9,6 +9,7 @@ double_hashtag		\#\#
 main_word		main
 begin_word		begin
 end_word		end
+call_word		call
 south_word		SOUTH
 north_word		NORTH
 east_word		EAST
@@ -93,6 +94,7 @@ char_stmt		\'[^\\\']\'
 \&			return("AND");
 \|			return("OR");
 {main_word}		return("MAIN");
+{call_word}		return("CALL");
 {south_word}		return("SOUTH");
 {north_word}		return("NORTH");
 {east_word}		return("EAST");
