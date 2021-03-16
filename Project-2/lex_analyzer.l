@@ -6,7 +6,6 @@ void yyerror(char *);
 hashtag 		\#
 double_hashtag		\#\#
 main_word		main
-call_word		call
 south_word		SOUTH
 north_word		NORTH
 east_word		EAST
@@ -40,7 +39,7 @@ newline			\n
 true_bool		true
 false_bool		false
 
-line_comment		{double_hashtag}([^\n])*\n
+line_comment		{double_hashtag}([^\n])*
 comment			{hashtag}([^\#])*{hashtag}
 
 digit			[0-9]
@@ -90,7 +89,6 @@ char_stmt		\'[^\\\']\'
 \&			return AND;
 \|			return OR;
 {main_word}		return MAIN;
-{call_word}		return CALL;
 {south_word}		return SOUTH;
 {north_word}		return NORTH;
 {east_word}		return EAST;

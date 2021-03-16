@@ -15,11 +15,11 @@ void chestFunction(int heroLevel, int heroStrength, double heroDamage, int heroW
 	eggout("Your whealth: " + heroWhealth + \n);
 }
 
-void openChest( int heroLevel, int herostrength ){
+void openChest( int heroLevel, int heroStrength ){
 	heroLevel = heroLevel + 1;
 	heroDamage = heroLevel * 10;
-	heroStrength = heroStrength + (PLAYERY * 20);
-	heroWhealth = heroWhealth + (PLAYERY * 50);
+	heroStrength = heroStrength + PLAYERY * 20;
+	heroWhealth = heroWhealth + PLAYERY * 50;
 }
 
 int askForPurchase(){

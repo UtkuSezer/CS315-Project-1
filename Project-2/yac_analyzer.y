@@ -4,7 +4,6 @@
 %}
 
 %token NOT
-%token CALL
 %token LP
 %token RP
 %token LCB
@@ -43,7 +42,6 @@
 %token PLAYERX
 %token PLAYERY
 %token MOVE
-%token NEW_LINE
 %token UNDERSCORE
 %token EGG_IN
 %token EGG_OUT
@@ -79,23 +77,20 @@ program:
 	stmts
 
 stmts:
-
-	stmt NEW_LINE | stmts stmt NEW_LINE
-
+	stmt | stmts stmt
 stmt:
-	matched_stmt 
-	| unmatched_stmt
+	conditional_stmt
+	|non_if_stmt
 
-matched_stmt:
-	IF LP logical_expression RP LCB matched_stmt RCB ELSE LCB matched_stmt RCB
-	| non_if_stmt
+conditional_stmt:
+	if_stmt
 
-unmatched_stmt:
+if_stmt:
 	IF LP logical_expression RP LCB stmts RCB
-	| IF LP logical_expression RP LCB matched_stmt RCB ELSE LCB unmatched_stmt RCB
+	| IF LP logical_expression RP LCB stmts RCB ELSE LCB stmts RCB
 
 non_if_stmt:
-	| loops
+	loops
 	| arithmetic_operations SEMICOLON
 	| function_call
 	| function_declaration
@@ -104,7 +99,7 @@ non_if_stmt:
 	| declaration_and_initialization
 	| input_stmt
 	| output_stmt
-	| COMMENT NEW_LINE
+	| COMMENT
 	| LINE_COMMENT
 
 loops:
@@ -129,7 +124,8 @@ logical_expression:
 	recursive_expression
 
 single_expression: 
-	term logical_operator term 
+	term logical_operator term
+	|term logical_operator assignment_values 
 	| BOOL_STMT
 	| NOT BOOL_STMT
 
@@ -142,6 +138,8 @@ term:
 
 var:
 	IDENTIFIER
+	|PLAYERX
+	|PLAYERY
 
 logical_connector:
 	AND
@@ -209,14 +207,27 @@ types:
 	INT | DOUBLE | STRING | CHAR | BOOL
 
 function_call:
-	CALL IDENTIFIER LP IDENTIFIER RP SEMICOLON
+	IDENTIFIER LP call_parameter RP SEMICOLON
 
 initialization: 
-	term assignment_operator assignment_values SEMICOLON
+	term assignment_operator args SEMICOLON
 
 declaration_and_initialization:
-	types term assignment_operator assignment_values SEMICOLON
-	| types constant_identifier assignment_operator assignment_values SEMICOLON
+	types constant_identifier assignment_operator assignment_values SEMICOLON
+	| types term assignment_operator args SEMICOLON
+
+args:
+	args arithmetic_operators assignment_values
+	| args arithmetic_operators var
+	| var
+	| assignment_values
+
+arithmetic_operators:
+	PLUS
+	|MINUS
+	|MULTIPLY_OP
+	|DIVIDE_OP
+	|MOD_OP	
 
 assignment_operator: 
 	ASSIGN_OP
@@ -251,13 +262,19 @@ output_context:
 
 function_declaration:
 	VOID IDENTIFIER LP parameter RP LCB stmts RCB 
-	| types IDENTIFIER LP parameter RP LCB stmts RETURN assignment_values SEMICOLON RCB 
+	| types IDENTIFIER LP parameter RP LCB stmts RETURN assignment_values SEMICOLON RCB
+	| types IDENTIFIER LP parameter RP LCB stmts RETURN term SEMICOLON RCB  
 	| VOID IDENTIFIER LP parameter RP LCB stmts RETURN VOID SEMICOLON RCB
+	| INT MAIN LP RP LCB stmts RETURN INT_STMT RCB
 
 parameter:
 	parameter COMMA types IDENTIFIER
 	| types IDENTIFIER
-
+	|
+call_parameter:
+	call_parameter COMMA IDENTIFIER
+	| IDENTIFIER
+	|
 %%
 
 #include "lex.yy.c"
