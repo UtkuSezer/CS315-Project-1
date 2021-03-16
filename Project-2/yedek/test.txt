@@ -1,0 +1,16 @@
+if( x == 5 &  (y != 31 | anan >= yarak)  ) {
+	int a = 33;
+}
+
+
+if( (x == 5 &  y != 31) | anan >= yarak  ) {
+	string a = merhaba;
+}
+
+if((annecim  == 3) | (babacim == 2) ) {
+	anan = 31;
+}
+
+if((direction == "up") & (PLAYERX == 5) & (PLAYERY == 1) ) {
+	anan = 31;
+}

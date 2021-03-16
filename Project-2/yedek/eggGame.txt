@@ -1,0 +1,164 @@
+# Action-RPG Game
+  Apocalyptic Games Presents
+  "How I Met Your Princess?"
+
+@date 28.02.2021
+#
+
+## Functions
+void chestFunction(int heroLevel, int heroStrength, double heroDamage, int heroWhealth){
+	eggout("You have found a chest!" + \n);
+	openChest( heroLevel, herostrength);
+	eggout("Your level: " + heroLevel + \n);
+	eggout("Your damage: " + heroDamage + \n);
+	eggout("Your strength: " + heroStrength + \n);
+	eggout("Your whealth: " + heroWhealth + \n);
+}
+
+void openChest( int heroLevel, int heroStrength ){
+	heroLevel = heroLevel + 1;
+	heroDamage = heroLevel * 10;
+	heroStrength = heroStrength + PLAYERY * 20;
+	heroWhealth = heroWhealth + PLAYERY * 50;
+}
+
+int askForPurchase(){
+	int answer;
+	eggout("Do you want to purchase new items? YES(1) / NO(0)" + \n);
+	eggin(answer);
+	return answer;
+}
+
+void buyItems( int whealth, int heroDamage){
+	int itemNo;
+	eggout("1-Sword(15g)   2-Dagger(10g)   3-Axe(20g)   4-Bow(20g) ----> Choose an item" + \n);
+	eggin(itemNo);
+
+	## If statements
+	if(itemNo == 1 & whealth < 15){ 
+		whealth = whealth - 15;
+		damage = damage + 10;
+	}
+	if(itemNo == 2 & whealth < 10){ 
+		whealth = whealth - 10;
+		damage = damage + 5;
+	}
+	if(itemNo == 3 & whealth < 20){ 
+		whealth = whealth - 20;
+		damage = damage + 15;
+	}
+	if(itemNo == 4 & whealth < 20) { 
+		whealth = whealth - 20;
+		damage = damage + 15;
+	}
+	if(itemNo < 1 & itemNo > 4){
+		eggout("Invalid item index. You can't buy anything..." + \n);
+	}
+	else{
+		eggout("You do not have enough money. You can't buy anything..." + \n);
+	}
+}
+
+int main(){
+	
+	## Variables
+	bool game = true;
+	int heroStrength = 100;
+	int heroLevel = 1;
+	double heroDamage = heroLevel * 10;
+	PLAYERX = 1;
+	PLAYERY = 1;
+	int heroWhealth;
+	string direction;
+
+	while(game){
+
+		eggout("Where do you want to move?" + \n);
+		eggin(direction);
+
+		## If hero wants to go left block
+		if(direction == "left"){
+			if(PLAYERX == 1){ ## If user cannot go left
+				eggout("You cannot go that direction!" + \n);
+			}
+			else{
+				move(WEST);
+				eggout("Your stage: " + PLAYERY + \n);
+				eggout("Your block: " + PLAYERX + \n);
+			}
+		}
+
+		## If hero wants to go right block
+		if(direction == "right" & PLAYERX != 5){
+			move(EAST);
+			eggout("Your stage: " + PLAYERY + \n);
+			eggout("Your block: " + PLAYERX + \n);
+		}
+		else{ ## If user cannot go right
+			eggout("You cannot go that direction!" + \n);
+		}
+
+		## If hero wants to go up stage
+		if( (direction == "up") & (((PLAYERX == 5) & (PLAYERY == 1)) | ((PLAYERY == 2) & (PLAYERX == 3)) | ((PLAYERY == 3) & (PLAYERX == 5 | PLAYERX == 2)) | ((PLAYERY == 4) & (PLAYERX == 4)) | ((PLAYERY == 5) & (PLAYERX == 2))) ){
+			move(NORTH);
+			int purchase = askForPurchase();
+
+			if( purchase == 1 ) {
+				buyItems( whealth, heroDamage );
+			}
+			
+			eggout("Your stage: " + PLAYERY + \n);
+			eggout("Your block: " + PLAYERX + \n);
+
+		}
+		else{ ## If user cannot go up
+			eggout("You cannot go that direction!" + \n);
+		}
+
+		## If hero wants to go down stage
+		if( (direction == "down") & (((PLAYERX == 5) | (PLAYERY == 2)) | ((PLAYERY == 3) & (PLAYERX == 3)) | ((PLAYERY == 4) & (PLAYERX == 5 | PLAYERX == 2)) | ((PLAYERY == 5) & (PLAYERX == 4)) | ((PLAYERY == 6) & (PLAYERX == 2))) ){
+			
+			move(SOUTH);
+			eggout("Your stage: " + PLAYERY + \n);
+			eggout("Your block: " + PLAYERX + \n);
+
+		}
+		else{ ## If user cannot go down
+			eggout("You cannot go that direction!" + \n);
+		}
+
+		## If hero encounters an enemy
+		if( ((PLAYERY == 1) & (PLAYERX == 3)) | ((PLAYERY == 3) & (PLAYERX == 5)) | ((PLAYERY == 4) & (PLAYERX == 3)) | ((PLAYERY == 6) & ((PLAYERX == 4) | (PLAYERX == 1)) ) ){
+			eggout("You have found an enemy at stage " + PLAYERY + \n);
+			
+			heroStrength = heroStrength - (PLAYERY * 10);
+			if(heroDamage <= (PLAYERY * 10)){
+				heroStrength = heroStrength - 20;
+			}
+			eggout("Your level: " + heroLevel + \n);
+			eggout("Your damage: " + heroDamage + \n);
+			eggout("Your strength: " + heroStrength + \n);
+			eggout("Your whealth: " + heroWhealth + \n);
+		}
+		
+		## If hero gets a chest
+		if( ((PLAYERY == 2) & (PLAYERX == 1)) | ((PLAYERY == 3) & (PLAYERX == 1)) | ((PLAYERY == 4) & (PLAYERX == 5)) | ((PLAYERY == 5) & ((PLAYERX == 1) | (PLAYERX == 5))) ){
+			chestFunction();
+		}
+
+		## If hero meets with princess
+		if( PLAYERY == 6 & PLAYERX == 5 ){
+			eggout("Congratulations! You have found the Princess." + \n);
+			game = false;
+		}
+		## If hero dies
+		if( heroStrength <= 0 ){
+			eggout("You died!" + \n);
+			game = false;
+		}
+	}
+
+	eggout("Your score is " + ((2 * heroWhealth) + (3 * heroStrength)) + \n);
+
+	return 0;
+}

@@ -1,0 +1,3594 @@
+   0  $accept : program $end
+
+   1  program : stmts
+
+   2  stmts : stmt
+   3        | stmts stmt
+
+   4  stmt : conditional_stmt
+   5       | non_if_stmt
+
+   6  conditional_stmt : if_stmt
+
+   7  if_stmt : IF LP logical_expression RP LCB stmts RCB
+   8          | IF LP logical_expression RP LCB stmts RCB ELSE LCB stmts RCB
+
+   9  non_if_stmt : loops
+  10              | arithmetic_operations SEMICOLON
+  11              | function_call
+  12              | function_declaration
+  13              | declaration
+  14              | initialization
+  15              | declaration_and_initialization
+  16              | input_stmt
+  17              | output_stmt
+  18              | COMMENT
+  19              | LINE_COMMENT
+
+  20  loops : while_loop
+  21        | for_loop
+  22        | do_while_loop
+
+  23  while_loop : WHILE LP logical_expression RP LCB stmts RCB
+
+  24  for_loop : FOR LP loop_initialization logical_expression SEMICOLON arithmetic_operations RP LCB stmts RCB
+
+  25  do_while_loop : DO LCB stmts RCB WHILE LP logical_expression RP SEMICOLON
+
+  26  loop_initialization : initialization
+  27                      | declaration_and_initialization
+
+  28  logical_expression : recursive_expression
+
+  29  recursive_expression : recursive_expression logical_connector single_expression
+  30                       | LP recursive_expression RP
+  31                       | sub_expression
+  32                       | IDENTIFIER
+
+  33  single_expression : LP single_expression logical_connector sub_expression RP
+  34                    | LP single_expression RP
+  35                    | sub_expression
+
+  36  sub_expression : term logical_operator term
+  37                 | term logical_operator assignment_values
+  38                 | LP sub_expression RP
+  39                 | BOOL_STMT
+  40                 | NOT BOOL_STMT
+
+  41  term : var
+
+  42  var : IDENTIFIER
+  43      | PLAYERX
+  44      | PLAYERY
+
+  45  logical_connector : AND
+  46                    | OR
+
+  47  logical_operator : IS_EQUAL_OP
+  48                   | NOT_EQUAL_OP
+  49                   | NOT
+  50                   | GT
+  51                   | LT
+  52                   | GTE
+  53                   | LTE
+
+  54  arithmetic_operations : arithmetic_operations PLUS divisionAndMultiplication
+  55                        | arithmetic_operations MINUS divisionAndMultiplication
+  56                        | divisionAndMultiplication
+  57                        | modulo
+  58                        | sqrt
+  59                        | power
+  60                        | max
+  61                        | min
+
+  62  divisionAndMultiplication : divisionAndMultiplication DIVIDE_OP factor
+  63                            | divisionAndMultiplication MULTIPLY_OP factor
+  64                            | factor
+
+  65  modulo : factor MOD_OP factor
+
+  66  power : POW LP INT_STMT COMMA INT_STMT RP
+  67        | POW LP INT_STMT COMMA DOUBLE_STMT RP
+  68        | POW LP DOUBLE_STMT COMMA INT_STMT RP
+  69        | POW LP DOUBLE_STMT COMMA DOUBLE_STMT RP
+
+  70  constant_identifier : CONST term
+
+  71  factor : LP term RP
+  72         | term
+
+  73  max : MAX LP INT_STMT COMMA INT_STMT RP
+  74      | MAX LP DOUBLE_STMT COMMA DOUBLE_STMT RP
+
+  75  min : MIN LP INT_STMT COMMA INT_STMT RP
+  76      | MIN LP DOUBLE_STMT RP COMMA DOUBLE_STMT RP
+
+  77  sqrt : SQUARE_ROOT LP INT_STMT RP
+  78       | SQUARE_ROOT LP DOUBLE_STMT RP
+
+  79  declaration : types term SEMICOLON
+  80              | types constant_identifier SEMICOLON
+
+  81  types : INT
+  82        | DOUBLE
+  83        | STRING
+  84        | CHAR
+  85        | BOOL
+
+  86  function_call : IDENTIFIER LP call_parameter RP SEMICOLON
+  87                | MOVE LP direction RP SEMICOLON
+  88                | MOVE LP direction COMMA INT_STMT RP SEMICOLON
+
+  89  direction : WEST
+  90            | SOUTH
+  91            | EAST
+  92            | NORTH
+
+  93  initialization : term assignment_operator args SEMICOLON
+
+  94  declaration_and_initialization : types constant_identifier assignment_operator assignment_values SEMICOLON
+  95                                 | types term assignment_operator args SEMICOLON
+
+  96  args : args arithmetic_operators assignment_values
+  97       | args arithmetic_operators var
+  98       | var
+  99       | assignment_values
+
+ 100  arithmetic_operators : PLUS
+ 101                       | MINUS
+ 102                       | MULTIPLY_OP
+ 103                       | DIVIDE_OP
+ 104                       | MOD_OP
+
+ 105  assignment_operator : ASSIGN_OP
+ 106                      | DIVIDE_ASSIGN_OP
+ 107                      | MULTIPLY_ASSIGN_OP
+ 108                      | MOD_ASSIGN_OP
+ 109                      | PLUS_ASSIGN_OP
+ 110                      | MINUS_ASSIGN_OP
+
+ 111  assignment_values : BOOL_STMT
+ 112                    | INT_STMT
+ 113                    | STRING_STMT
+ 114                    | DOUBLE_STMT
+ 115                    | CHAR_STMT
+
+ 116  input_stmt : EGG_IN LP input_context RP SEMICOLON
+
+ 117  output_stmt : EGG_OUT LP output_context RP SEMICOLON
+
+ 118  input_context : term PLUS input_context
+ 119                | term
+
+ 120  output_context : term
+ 121                 | assignment_values
+ 122                 | term PLUS output_context
+ 123                 | assignment_values PLUS output_context
+
+ 124  function_declaration : VOID IDENTIFIER LP parameter RP LCB stmts RCB
+ 125                       | types IDENTIFIER LP parameter RP LCB stmts RETURN assignment_values SEMICOLON RCB
+ 126                       | types IDENTIFIER LP parameter RP LCB stmts RETURN term SEMICOLON RCB
+ 127                       | VOID IDENTIFIER LP parameter RP LCB stmts RETURN VOID SEMICOLON RCB
+ 128                       | INT MAIN LP RP LCB stmts RETURN INT_STMT RCB
+
+ 129  parameter : parameter COMMA types IDENTIFIER
+ 130            | types IDENTIFIER
+ 131            |
+
+ 132  call_parameter : call_parameter COMMA IDENTIFIER
+ 133                 | IDENTIFIER
+ 134                 |
+
+state 0
+	$accept : . program $end  (0)
+
+	LP  shift 1
+	PLAYERX  shift 2
+	PLAYERY  shift 3
+	MOVE  shift 4
+	EGG_IN  shift 5
+	EGG_OUT  shift 6
+	INT  shift 7
+	DOUBLE  shift 8
+	STRING  shift 9
+	CHAR  shift 10
+	BOOL  shift 11
+	IF  shift 12
+	FOR  shift 13
+	WHILE  shift 14
+	DO  shift 15
+	VOID  shift 16
+	POW  shift 17
+	MAX  shift 18
+	MIN  shift 19
+	SQUARE_ROOT  shift 20
+	IDENTIFIER  shift 21
+	COMMENT  shift 22
+	LINE_COMMENT  shift 23
+	.  error
+
+	program  goto 24
+	stmts  goto 25
+	stmt  goto 26
+	conditional_stmt  goto 27
+	non_if_stmt  goto 28
+	if_stmt  goto 29
+	loops  goto 30
+	arithmetic_operations  goto 31
+	function_call  goto 32
+	function_declaration  goto 33
+	declaration  goto 34
+	initialization  goto 35
+	declaration_and_initialization  goto 36
+	input_stmt  goto 37
+	output_stmt  goto 38
+	while_loop  goto 39
+	for_loop  goto 40
+	do_while_loop  goto 41
+	term  goto 42
+	var  goto 43
+	divisionAndMultiplication  goto 44
+	modulo  goto 45
+	sqrt  goto 46
+	power  goto 47
+	max  goto 48
+	min  goto 49
+	factor  goto 50
+	types  goto 51
+
+
+state 1
+	factor : LP . term RP  (71)
+
+	PLAYERX  shift 2
+	PLAYERY  shift 3
+	IDENTIFIER  shift 52
+	.  error
+
+	term  goto 53
+	var  goto 43
+
+
+state 2
+	var : PLAYERX .  (43)
+
+	.  reduce 43
+
+
+state 3
+	var : PLAYERY .  (44)
+
+	.  reduce 44
+
+
+state 4
+	function_call : MOVE . LP direction RP SEMICOLON  (87)
+	function_call : MOVE . LP direction COMMA INT_STMT RP SEMICOLON  (88)
+
+	LP  shift 54
+	.  error
+
+
+state 5
+	input_stmt : EGG_IN . LP input_context RP SEMICOLON  (116)
+
+	LP  shift 55
+	.  error
+
+
+state 6
+	output_stmt : EGG_OUT . LP output_context RP SEMICOLON  (117)
+
+	LP  shift 56
+	.  error
+
+
+state 7
+	types : INT .  (81)
+	function_declaration : INT . MAIN LP RP LCB stmts RETURN INT_STMT RCB  (128)
+
+	MAIN  shift 57
+	PLAYERX  reduce 81
+	PLAYERY  reduce 81
+	CONST  reduce 81
+	IDENTIFIER  reduce 81
+
+
+state 8
+	types : DOUBLE .  (82)
+
+	.  reduce 82
+
+
+state 9
+	types : STRING .  (83)
+
+	.  reduce 83
+
+
+state 10
+	types : CHAR .  (84)
+
+	.  reduce 84
+
+
+state 11
+	types : BOOL .  (85)
+
+	.  reduce 85
+
+
+state 12
+	if_stmt : IF . LP logical_expression RP LCB stmts RCB  (7)
+	if_stmt : IF . LP logical_expression RP LCB stmts RCB ELSE LCB stmts RCB  (8)
+
+	LP  shift 58
+	.  error
+
+
+state 13
+	for_loop : FOR . LP loop_initialization logical_expression SEMICOLON arithmetic_operations RP LCB stmts RCB  (24)
+
+	LP  shift 59
+	.  error
+
+
+state 14
+	while_loop : WHILE . LP logical_expression RP LCB stmts RCB  (23)
+
+	LP  shift 60
+	.  error
+
+
+state 15
+	do_while_loop : DO . LCB stmts RCB WHILE LP logical_expression RP SEMICOLON  (25)
+
+	LCB  shift 61
+	.  error
+
+
+state 16
+	function_declaration : VOID . IDENTIFIER LP parameter RP LCB stmts RCB  (124)
+	function_declaration : VOID . IDENTIFIER LP parameter RP LCB stmts RETURN VOID SEMICOLON RCB  (127)
+
+	IDENTIFIER  shift 62
+	.  error
+
+
+state 17
+	power : POW . LP INT_STMT COMMA INT_STMT RP  (66)
+	power : POW . LP INT_STMT COMMA DOUBLE_STMT RP  (67)
+	power : POW . LP DOUBLE_STMT COMMA INT_STMT RP  (68)
+	power : POW . LP DOUBLE_STMT COMMA DOUBLE_STMT RP  (69)
+
+	LP  shift 63
+	.  error
+
+
+state 18
+	max : MAX . LP INT_STMT COMMA INT_STMT RP  (73)
+	max : MAX . LP DOUBLE_STMT COMMA DOUBLE_STMT RP  (74)
+
+	LP  shift 64
+	.  error
+
+
+state 19
+	min : MIN . LP INT_STMT COMMA INT_STMT RP  (75)
+	min : MIN . LP DOUBLE_STMT RP COMMA DOUBLE_STMT RP  (76)
+
+	LP  shift 65
+	.  error
+
+
+state 20
+	sqrt : SQUARE_ROOT . LP INT_STMT RP  (77)
+	sqrt : SQUARE_ROOT . LP DOUBLE_STMT RP  (78)
+
+	LP  shift 66
+	.  error
+
+
+state 21
+	var : IDENTIFIER .  (42)
+	function_call : IDENTIFIER . LP call_parameter RP SEMICOLON  (86)
+
+	LP  shift 67
+	SEMICOLON  reduce 42
+	ASSIGN_OP  reduce 42
+	DIVIDE_ASSIGN_OP  reduce 42
+	MULTIPLY_ASSIGN_OP  reduce 42
+	MOD_ASSIGN_OP  reduce 42
+	PLUS_ASSIGN_OP  reduce 42
+	MINUS_ASSIGN_OP  reduce 42
+	PLUS  reduce 42
+	MINUS  reduce 42
+	MULTIPLY_OP  reduce 42
+	DIVIDE_OP  reduce 42
+	MOD_OP  reduce 42
+
+
+state 22
+	non_if_stmt : COMMENT .  (18)
+
+	.  reduce 18
+
+
+state 23
+	non_if_stmt : LINE_COMMENT .  (19)
+
+	.  reduce 19
+
+
+state 24
+	$accept : program . $end  (0)
+
+	$end  accept
+
+
+state 25
+	program : stmts .  (1)
+	stmts : stmts . stmt  (3)
+
+	LP  shift 1
+	PLAYERX  shift 2
+	PLAYERY  shift 3
+	MOVE  shift 4
+	EGG_IN  shift 5
+	EGG_OUT  shift 6
+	INT  shift 7
+	DOUBLE  shift 8
+	STRING  shift 9
+	CHAR  shift 10
+	BOOL  shift 11
+	IF  shift 12
+	FOR  shift 13
+	WHILE  shift 14
+	DO  shift 15
+	VOID  shift 16
+	POW  shift 17
+	MAX  shift 18
+	MIN  shift 19
+	SQUARE_ROOT  shift 20
+	IDENTIFIER  shift 21
+	COMMENT  shift 22
+	LINE_COMMENT  shift 23
+	$end  reduce 1
+
+	stmt  goto 68
+	conditional_stmt  goto 27
+	non_if_stmt  goto 28
+	if_stmt  goto 29
+	loops  goto 30
+	arithmetic_operations  goto 31
+	function_call  goto 32
+	function_declaration  goto 33
+	declaration  goto 34
+	initialization  goto 35
+	declaration_and_initialization  goto 36
+	input_stmt  goto 37
+	output_stmt  goto 38
+	while_loop  goto 39
+	for_loop  goto 40
+	do_while_loop  goto 41
+	term  goto 42
+	var  goto 43
+	divisionAndMultiplication  goto 44
+	modulo  goto 45
+	sqrt  goto 46
+	power  goto 47
+	max  goto 48
+	min  goto 49
+	factor  goto 50
+	types  goto 51
+
+
+state 26
+	stmts : stmt .  (2)
+
+	.  reduce 2
+
+
+state 27
+	stmt : conditional_stmt .  (4)
+
+	.  reduce 4
+
+
+state 28
+	stmt : non_if_stmt .  (5)
+
+	.  reduce 5
+
+
+state 29
+	conditional_stmt : if_stmt .  (6)
+
+	.  reduce 6
+
+
+state 30
+	non_if_stmt : loops .  (9)
+
+	.  reduce 9
+
+
+state 31
+	non_if_stmt : arithmetic_operations . SEMICOLON  (10)
+	arithmetic_operations : arithmetic_operations . PLUS divisionAndMultiplication  (54)
+	arithmetic_operations : arithmetic_operations . MINUS divisionAndMultiplication  (55)
+
+	SEMICOLON  shift 69
+	PLUS  shift 70
+	MINUS  shift 71
+	.  error
+
+
+state 32
+	non_if_stmt : function_call .  (11)
+
+	.  reduce 11
+
+
+state 33
+	non_if_stmt : function_declaration .  (12)
+
+	.  reduce 12
+
+
+state 34
+	non_if_stmt : declaration .  (13)
+
+	.  reduce 13
+
+
+state 35
+	non_if_stmt : initialization .  (14)
+
+	.  reduce 14
+
+
+state 36
+	non_if_stmt : declaration_and_initialization .  (15)
+
+	.  reduce 15
+
+
+state 37
+	non_if_stmt : input_stmt .  (16)
+
+	.  reduce 16
+
+
+state 38
+	non_if_stmt : output_stmt .  (17)
+
+	.  reduce 17
+
+
+state 39
+	loops : while_loop .  (20)
+
+	.  reduce 20
+
+
+state 40
+	loops : for_loop .  (21)
+
+	.  reduce 21
+
+
+state 41
+	loops : do_while_loop .  (22)
+
+	.  reduce 22
+
+
+state 42
+	factor : term .  (72)
+	initialization : term . assignment_operator args SEMICOLON  (93)
+
+	ASSIGN_OP  shift 72
+	DIVIDE_ASSIGN_OP  shift 73
+	MULTIPLY_ASSIGN_OP  shift 74
+	MOD_ASSIGN_OP  shift 75
+	PLUS_ASSIGN_OP  shift 76
+	MINUS_ASSIGN_OP  shift 77
+	SEMICOLON  reduce 72
+	PLUS  reduce 72
+	MINUS  reduce 72
+	MULTIPLY_OP  reduce 72
+	DIVIDE_OP  reduce 72
+	MOD_OP  reduce 72
+
+	assignment_operator  goto 78
+
+
+state 43
+	term : var .  (41)
+
+	.  reduce 41
+
+
+state 44
+	arithmetic_operations : divisionAndMultiplication .  (56)
+	divisionAndMultiplication : divisionAndMultiplication . DIVIDE_OP factor  (62)
+	divisionAndMultiplication : divisionAndMultiplication . MULTIPLY_OP factor  (63)
+
+	MULTIPLY_OP  shift 79
+	DIVIDE_OP  shift 80
+	RP  reduce 56
+	SEMICOLON  reduce 56
+	PLUS  reduce 56
+	MINUS  reduce 56
+
+
+state 45
+	arithmetic_operations : modulo .  (57)
+
+	.  reduce 57
+
+
+state 46
+	arithmetic_operations : sqrt .  (58)
+
+	.  reduce 58
+
+
+state 47
+	arithmetic_operations : power .  (59)
+
+	.  reduce 59
+
+
+state 48
+	arithmetic_operations : max .  (60)
+
+	.  reduce 60
+
+
+state 49
+	arithmetic_operations : min .  (61)
+
+	.  reduce 61
+
+
+state 50
+	divisionAndMultiplication : factor .  (64)
+	modulo : factor . MOD_OP factor  (65)
+
+	MOD_OP  shift 81
+	RP  reduce 64
+	SEMICOLON  reduce 64
+	PLUS  reduce 64
+	MINUS  reduce 64
+	MULTIPLY_OP  reduce 64
+	DIVIDE_OP  reduce 64
+
+
+state 51
+	declaration : types . term SEMICOLON  (79)
+	declaration : types . constant_identifier SEMICOLON  (80)
+	declaration_and_initialization : types . constant_identifier assignment_operator assignment_values SEMICOLON  (94)
+	declaration_and_initialization : types . term assignment_operator args SEMICOLON  (95)
+	function_declaration : types . IDENTIFIER LP parameter RP LCB stmts RETURN assignment_values SEMICOLON RCB  (125)
+	function_declaration : types . IDENTIFIER LP parameter RP LCB stmts RETURN term SEMICOLON RCB  (126)
+
+	PLAYERX  shift 2
+	PLAYERY  shift 3
+	CONST  shift 82
+	IDENTIFIER  shift 83
+	.  error
+
+	term  goto 84
+	var  goto 43
+	constant_identifier  goto 85
+
+
+state 52
+	var : IDENTIFIER .  (42)
+
+	.  reduce 42
+
+
+state 53
+	factor : LP term . RP  (71)
+
+	RP  shift 86
+	.  error
+
+
+state 54
+	function_call : MOVE LP . direction RP SEMICOLON  (87)
+	function_call : MOVE LP . direction COMMA INT_STMT RP SEMICOLON  (88)
+
+	SOUTH  shift 87
+	NORTH  shift 88
+	EAST  shift 89
+	WEST  shift 90
+	.  error
+
+	direction  goto 91
+
+
+state 55
+	input_stmt : EGG_IN LP . input_context RP SEMICOLON  (116)
+
+	PLAYERX  shift 2
+	PLAYERY  shift 3
+	IDENTIFIER  shift 52
+	.  error
+
+	term  goto 92
+	var  goto 43
+	input_context  goto 93
+
+
+state 56
+	output_stmt : EGG_OUT LP . output_context RP SEMICOLON  (117)
+
+	PLAYERX  shift 2
+	PLAYERY  shift 3
+	BOOL_STMT  shift 94
+	STRING_STMT  shift 95
+	INT_STMT  shift 96
+	DOUBLE_STMT  shift 97
+	CHAR_STMT  shift 98
+	IDENTIFIER  shift 52
+	.  error
+
+	term  goto 99
+	assignment_values  goto 100
+	var  goto 43
+	output_context  goto 101
+
+
+state 57
+	function_declaration : INT MAIN . LP RP LCB stmts RETURN INT_STMT RCB  (128)
+
+	LP  shift 102
+	.  error
+
+
+state 58
+	if_stmt : IF LP . logical_expression RP LCB stmts RCB  (7)
+	if_stmt : IF LP . logical_expression RP LCB stmts RCB ELSE LCB stmts RCB  (8)
+
+	NOT  shift 103
+	LP  shift 104
+	PLAYERX  shift 2
+	PLAYERY  shift 3
+	BOOL_STMT  shift 105
+	IDENTIFIER  shift 106
+	.  error
+
+	logical_expression  goto 107
+	recursive_expression  goto 108
+	sub_expression  goto 109
+	term  goto 110
+	var  goto 43
+
+
+state 59
+	for_loop : FOR LP . loop_initialization logical_expression SEMICOLON arithmetic_operations RP LCB stmts RCB  (24)
+
+	PLAYERX  shift 2
+	PLAYERY  shift 3
+	INT  shift 111
+	DOUBLE  shift 8
+	STRING  shift 9
+	CHAR  shift 10
+	BOOL  shift 11
+	IDENTIFIER  shift 52
+	.  error
+
+	initialization  goto 112
+	declaration_and_initialization  goto 113
+	loop_initialization  goto 114
+	term  goto 115
+	var  goto 43
+	types  goto 116
+
+
+state 60
+	while_loop : WHILE LP . logical_expression RP LCB stmts RCB  (23)
+
+	NOT  shift 103
+	LP  shift 104
+	PLAYERX  shift 2
+	PLAYERY  shift 3
+	BOOL_STMT  shift 105
+	IDENTIFIER  shift 106
+	.  error
+
+	logical_expression  goto 117
+	recursive_expression  goto 108
+	sub_expression  goto 109
+	term  goto 110
+	var  goto 43
+
+
+state 61
+	do_while_loop : DO LCB . stmts RCB WHILE LP logical_expression RP SEMICOLON  (25)
+
+	LP  shift 1
+	PLAYERX  shift 2
+	PLAYERY  shift 3
+	MOVE  shift 4
+	EGG_IN  shift 5
+	EGG_OUT  shift 6
+	INT  shift 7
+	DOUBLE  shift 8
+	STRING  shift 9
+	CHAR  shift 10
+	BOOL  shift 11
+	IF  shift 12
+	FOR  shift 13
+	WHILE  shift 14
+	DO  shift 15
+	VOID  shift 16
+	POW  shift 17
+	MAX  shift 18
+	MIN  shift 19
+	SQUARE_ROOT  shift 20
+	IDENTIFIER  shift 21
+	COMMENT  shift 22
+	LINE_COMMENT  shift 23
+	.  error
+
+	stmts  goto 118
+	stmt  goto 26
+	conditional_stmt  goto 27
+	non_if_stmt  goto 28
+	if_stmt  goto 29
+	loops  goto 30
+	arithmetic_operations  goto 31
+	function_call  goto 32
+	function_declaration  goto 33
+	declaration  goto 34
+	initialization  goto 35
+	declaration_and_initialization  goto 36
+	input_stmt  goto 37
+	output_stmt  goto 38
+	while_loop  goto 39
+	for_loop  goto 40
+	do_while_loop  goto 41
+	term  goto 42
+	var  goto 43
+	divisionAndMultiplication  goto 44
+	modulo  goto 45
+	sqrt  goto 46
+	power  goto 47
+	max  goto 48
+	min  goto 49
+	factor  goto 50
+	types  goto 51
+
+
+state 62
+	function_declaration : VOID IDENTIFIER . LP parameter RP LCB stmts RCB  (124)
+	function_declaration : VOID IDENTIFIER . LP parameter RP LCB stmts RETURN VOID SEMICOLON RCB  (127)
+
+	LP  shift 119
+	.  error
+
+
+state 63
+	power : POW LP . INT_STMT COMMA INT_STMT RP  (66)
+	power : POW LP . INT_STMT COMMA DOUBLE_STMT RP  (67)
+	power : POW LP . DOUBLE_STMT COMMA INT_STMT RP  (68)
+	power : POW LP . DOUBLE_STMT COMMA DOUBLE_STMT RP  (69)
+
+	INT_STMT  shift 120
+	DOUBLE_STMT  shift 121
+	.  error
+
+
+state 64
+	max : MAX LP . INT_STMT COMMA INT_STMT RP  (73)
+	max : MAX LP . DOUBLE_STMT COMMA DOUBLE_STMT RP  (74)
+
+	INT_STMT  shift 122
+	DOUBLE_STMT  shift 123
+	.  error
+
+
+state 65
+	min : MIN LP . INT_STMT COMMA INT_STMT RP  (75)
+	min : MIN LP . DOUBLE_STMT RP COMMA DOUBLE_STMT RP  (76)
+
+	INT_STMT  shift 124
+	DOUBLE_STMT  shift 125
+	.  error
+
+
+state 66
+	sqrt : SQUARE_ROOT LP . INT_STMT RP  (77)
+	sqrt : SQUARE_ROOT LP . DOUBLE_STMT RP  (78)
+
+	INT_STMT  shift 126
+	DOUBLE_STMT  shift 127
+	.  error
+
+
+state 67
+	function_call : IDENTIFIER LP . call_parameter RP SEMICOLON  (86)
+	call_parameter : .  (134)
+
+	IDENTIFIER  shift 128
+	RP  reduce 134
+	COMMA  reduce 134
+
+	call_parameter  goto 129
+
+
+state 68
+	stmts : stmts stmt .  (3)
+
+	.  reduce 3
+
+
+state 69
+	non_if_stmt : arithmetic_operations SEMICOLON .  (10)
+
+	.  reduce 10
+
+
+state 70
+	arithmetic_operations : arithmetic_operations PLUS . divisionAndMultiplication  (54)
+
+	LP  shift 1
+	PLAYERX  shift 2
+	PLAYERY  shift 3
+	IDENTIFIER  shift 52
+	.  error
+
+	term  goto 130
+	var  goto 43
+	divisionAndMultiplication  goto 131
+	factor  goto 132
+
+
+state 71
+	arithmetic_operations : arithmetic_operations MINUS . divisionAndMultiplication  (55)
+
+	LP  shift 1
+	PLAYERX  shift 2
+	PLAYERY  shift 3
+	IDENTIFIER  shift 52
+	.  error
+
+	term  goto 130
+	var  goto 43
+	divisionAndMultiplication  goto 133
+	factor  goto 132
+
+
+state 72
+	assignment_operator : ASSIGN_OP .  (105)
+
+	.  reduce 105
+
+
+state 73
+	assignment_operator : DIVIDE_ASSIGN_OP .  (106)
+
+	.  reduce 106
+
+
+state 74
+	assignment_operator : MULTIPLY_ASSIGN_OP .  (107)
+
+	.  reduce 107
+
+
+state 75
+	assignment_operator : MOD_ASSIGN_OP .  (108)
+
+	.  reduce 108
+
+
+state 76
+	assignment_operator : PLUS_ASSIGN_OP .  (109)
+
+	.  reduce 109
+
+
+state 77
+	assignment_operator : MINUS_ASSIGN_OP .  (110)
+
+	.  reduce 110
+
+
+state 78
+	initialization : term assignment_operator . args SEMICOLON  (93)
+
+	PLAYERX  shift 2
+	PLAYERY  shift 3
+	BOOL_STMT  shift 94
+	STRING_STMT  shift 95
+	INT_STMT  shift 96
+	DOUBLE_STMT  shift 97
+	CHAR_STMT  shift 98
+	IDENTIFIER  shift 52
+	.  error
+
+	assignment_values  goto 134
+	var  goto 135
+	args  goto 136
+
+
+state 79
+	divisionAndMultiplication : divisionAndMultiplication MULTIPLY_OP . factor  (63)
+
+	LP  shift 1
+	PLAYERX  shift 2
+	PLAYERY  shift 3
+	IDENTIFIER  shift 52
+	.  error
+
+	term  goto 130
+	var  goto 43
+	factor  goto 137
+
+
+state 80
+	divisionAndMultiplication : divisionAndMultiplication DIVIDE_OP . factor  (62)
+
+	LP  shift 1
+	PLAYERX  shift 2
+	PLAYERY  shift 3
+	IDENTIFIER  shift 52
+	.  error
+
+	term  goto 130
+	var  goto 43
+	factor  goto 138
+
+
+state 81
+	modulo : factor MOD_OP . factor  (65)
+
+	LP  shift 1
+	PLAYERX  shift 2
+	PLAYERY  shift 3
+	IDENTIFIER  shift 52
+	.  error
+
+	term  goto 130
+	var  goto 43
+	factor  goto 139
+
+
+state 82
+	constant_identifier : CONST . term  (70)
+
+	PLAYERX  shift 2
+	PLAYERY  shift 3
+	IDENTIFIER  shift 52
+	.  error
+
+	term  goto 140
+	var  goto 43
+
+
+state 83
+	var : IDENTIFIER .  (42)
+	function_declaration : types IDENTIFIER . LP parameter RP LCB stmts RETURN assignment_values SEMICOLON RCB  (125)
+	function_declaration : types IDENTIFIER . LP parameter RP LCB stmts RETURN term SEMICOLON RCB  (126)
+
+	LP  shift 141
+	SEMICOLON  reduce 42
+	ASSIGN_OP  reduce 42
+	DIVIDE_ASSIGN_OP  reduce 42
+	MULTIPLY_ASSIGN_OP  reduce 42
+	MOD_ASSIGN_OP  reduce 42
+	PLUS_ASSIGN_OP  reduce 42
+	MINUS_ASSIGN_OP  reduce 42
+
+
+state 84
+	declaration : types term . SEMICOLON  (79)
+	declaration_and_initialization : types term . assignment_operator args SEMICOLON  (95)
+
+	SEMICOLON  shift 142
+	ASSIGN_OP  shift 72
+	DIVIDE_ASSIGN_OP  shift 73
+	MULTIPLY_ASSIGN_OP  shift 74
+	MOD_ASSIGN_OP  shift 75
+	PLUS_ASSIGN_OP  shift 76
+	MINUS_ASSIGN_OP  shift 77
+	.  error
+
+	assignment_operator  goto 143
+
+
+state 85
+	declaration : types constant_identifier . SEMICOLON  (80)
+	declaration_and_initialization : types constant_identifier . assignment_operator assignment_values SEMICOLON  (94)
+
+	SEMICOLON  shift 144
+	ASSIGN_OP  shift 72
+	DIVIDE_ASSIGN_OP  shift 73
+	MULTIPLY_ASSIGN_OP  shift 74
+	MOD_ASSIGN_OP  shift 75
+	PLUS_ASSIGN_OP  shift 76
+	MINUS_ASSIGN_OP  shift 77
+	.  error
+
+	assignment_operator  goto 145
+
+
+state 86
+	factor : LP term RP .  (71)
+
+	.  reduce 71
+
+
+state 87
+	direction : SOUTH .  (90)
+
+	.  reduce 90
+
+
+state 88
+	direction : NORTH .  (92)
+
+	.  reduce 92
+
+
+state 89
+	direction : EAST .  (91)
+
+	.  reduce 91
+
+
+state 90
+	direction : WEST .  (89)
+
+	.  reduce 89
+
+
+state 91
+	function_call : MOVE LP direction . RP SEMICOLON  (87)
+	function_call : MOVE LP direction . COMMA INT_STMT RP SEMICOLON  (88)
+
+	RP  shift 146
+	COMMA  shift 147
+	.  error
+
+
+state 92
+	input_context : term . PLUS input_context  (118)
+	input_context : term .  (119)
+
+	PLUS  shift 148
+	RP  reduce 119
+
+
+state 93
+	input_stmt : EGG_IN LP input_context . RP SEMICOLON  (116)
+
+	RP  shift 149
+	.  error
+
+
+state 94
+	assignment_values : BOOL_STMT .  (111)
+
+	.  reduce 111
+
+
+state 95
+	assignment_values : STRING_STMT .  (113)
+
+	.  reduce 113
+
+
+state 96
+	assignment_values : INT_STMT .  (112)
+
+	.  reduce 112
+
+
+state 97
+	assignment_values : DOUBLE_STMT .  (114)
+
+	.  reduce 114
+
+
+state 98
+	assignment_values : CHAR_STMT .  (115)
+
+	.  reduce 115
+
+
+state 99
+	output_context : term .  (120)
+	output_context : term . PLUS output_context  (122)
+
+	PLUS  shift 150
+	RP  reduce 120
+
+
+state 100
+	output_context : assignment_values .  (121)
+	output_context : assignment_values . PLUS output_context  (123)
+
+	PLUS  shift 151
+	RP  reduce 121
+
+
+state 101
+	output_stmt : EGG_OUT LP output_context . RP SEMICOLON  (117)
+
+	RP  shift 152
+	.  error
+
+
+state 102
+	function_declaration : INT MAIN LP . RP LCB stmts RETURN INT_STMT RCB  (128)
+
+	RP  shift 153
+	.  error
+
+
+state 103
+	sub_expression : NOT . BOOL_STMT  (40)
+
+	BOOL_STMT  shift 154
+	.  error
+
+
+state 104
+	recursive_expression : LP . recursive_expression RP  (30)
+	sub_expression : LP . sub_expression RP  (38)
+
+	NOT  shift 103
+	LP  shift 104
+	PLAYERX  shift 2
+	PLAYERY  shift 3
+	BOOL_STMT  shift 105
+	IDENTIFIER  shift 106
+	.  error
+
+	recursive_expression  goto 155
+	sub_expression  goto 156
+	term  goto 110
+	var  goto 43
+
+
+state 105
+	sub_expression : BOOL_STMT .  (39)
+
+	.  reduce 39
+
+
+state 106
+	recursive_expression : IDENTIFIER .  (32)
+	var : IDENTIFIER .  (42)
+
+	NOT  reduce 42
+	RP  reduce 32
+	SEMICOLON  reduce 32
+	IS_EQUAL_OP  reduce 42
+	NOT_EQUAL_OP  reduce 42
+	GT  reduce 42
+	LT  reduce 42
+	LTE  reduce 42
+	GTE  reduce 42
+	AND  reduce 32
+	OR  reduce 32
+
+
+state 107
+	if_stmt : IF LP logical_expression . RP LCB stmts RCB  (7)
+	if_stmt : IF LP logical_expression . RP LCB stmts RCB ELSE LCB stmts RCB  (8)
+
+	RP  shift 157
+	.  error
+
+
+state 108
+	logical_expression : recursive_expression .  (28)
+	recursive_expression : recursive_expression . logical_connector single_expression  (29)
+
+	AND  shift 158
+	OR  shift 159
+	RP  reduce 28
+	SEMICOLON  reduce 28
+
+	logical_connector  goto 160
+
+
+state 109
+	recursive_expression : sub_expression .  (31)
+
+	.  reduce 31
+
+
+state 110
+	sub_expression : term . logical_operator term  (36)
+	sub_expression : term . logical_operator assignment_values  (37)
+
+	NOT  shift 161
+	IS_EQUAL_OP  shift 162
+	NOT_EQUAL_OP  shift 163
+	GT  shift 164
+	LT  shift 165
+	LTE  shift 166
+	GTE  shift 167
+	.  error
+
+	logical_operator  goto 168
+
+
+state 111
+	types : INT .  (81)
+
+	.  reduce 81
+
+
+state 112
+	loop_initialization : initialization .  (26)
+
+	.  reduce 26
+
+
+state 113
+	loop_initialization : declaration_and_initialization .  (27)
+
+	.  reduce 27
+
+
+state 114
+	for_loop : FOR LP loop_initialization . logical_expression SEMICOLON arithmetic_operations RP LCB stmts RCB  (24)
+
+	NOT  shift 103
+	LP  shift 104
+	PLAYERX  shift 2
+	PLAYERY  shift 3
+	BOOL_STMT  shift 105
+	IDENTIFIER  shift 106
+	.  error
+
+	logical_expression  goto 169
+	recursive_expression  goto 108
+	sub_expression  goto 109
+	term  goto 110
+	var  goto 43
+
+
+state 115
+	initialization : term . assignment_operator args SEMICOLON  (93)
+
+	ASSIGN_OP  shift 72
+	DIVIDE_ASSIGN_OP  shift 73
+	MULTIPLY_ASSIGN_OP  shift 74
+	MOD_ASSIGN_OP  shift 75
+	PLUS_ASSIGN_OP  shift 76
+	MINUS_ASSIGN_OP  shift 77
+	.  error
+
+	assignment_operator  goto 78
+
+
+state 116
+	declaration_and_initialization : types . constant_identifier assignment_operator assignment_values SEMICOLON  (94)
+	declaration_and_initialization : types . term assignment_operator args SEMICOLON  (95)
+
+	PLAYERX  shift 2
+	PLAYERY  shift 3
+	CONST  shift 82
+	IDENTIFIER  shift 52
+	.  error
+
+	term  goto 170
+	var  goto 43
+	constant_identifier  goto 171
+
+
+state 117
+	while_loop : WHILE LP logical_expression . RP LCB stmts RCB  (23)
+
+	RP  shift 172
+	.  error
+
+
+state 118
+	stmts : stmts . stmt  (3)
+	do_while_loop : DO LCB stmts . RCB WHILE LP logical_expression RP SEMICOLON  (25)
+
+	LP  shift 1
+	RCB  shift 173
+	PLAYERX  shift 2
+	PLAYERY  shift 3
+	MOVE  shift 4
+	EGG_IN  shift 5
+	EGG_OUT  shift 6
+	INT  shift 7
+	DOUBLE  shift 8
+	STRING  shift 9
+	CHAR  shift 10
+	BOOL  shift 11
+	IF  shift 12
+	FOR  shift 13
+	WHILE  shift 14
+	DO  shift 15
+	VOID  shift 16
+	POW  shift 17
+	MAX  shift 18
+	MIN  shift 19
+	SQUARE_ROOT  shift 20
+	IDENTIFIER  shift 21
+	COMMENT  shift 22
+	LINE_COMMENT  shift 23
+	.  error
+
+	stmt  goto 68
+	conditional_stmt  goto 27
+	non_if_stmt  goto 28
+	if_stmt  goto 29
+	loops  goto 30
+	arithmetic_operations  goto 31
+	function_call  goto 32
+	function_declaration  goto 33
+	declaration  goto 34
+	initialization  goto 35
+	declaration_and_initialization  goto 36
+	input_stmt  goto 37
+	output_stmt  goto 38
+	while_loop  goto 39
+	for_loop  goto 40
+	do_while_loop  goto 41
+	term  goto 42
+	var  goto 43
+	divisionAndMultiplication  goto 44
+	modulo  goto 45
+	sqrt  goto 46
+	power  goto 47
+	max  goto 48
+	min  goto 49
+	factor  goto 50
+	types  goto 51
+
+
+state 119
+	function_declaration : VOID IDENTIFIER LP . parameter RP LCB stmts RCB  (124)
+	function_declaration : VOID IDENTIFIER LP . parameter RP LCB stmts RETURN VOID SEMICOLON RCB  (127)
+	parameter : .  (131)
+
+	INT  shift 111
+	DOUBLE  shift 8
+	STRING  shift 9
+	CHAR  shift 10
+	BOOL  shift 11
+	RP  reduce 131
+	COMMA  reduce 131
+
+	types  goto 174
+	parameter  goto 175
+
+
+state 120
+	power : POW LP INT_STMT . COMMA INT_STMT RP  (66)
+	power : POW LP INT_STMT . COMMA DOUBLE_STMT RP  (67)
+
+	COMMA  shift 176
+	.  error
+
+
+state 121
+	power : POW LP DOUBLE_STMT . COMMA INT_STMT RP  (68)
+	power : POW LP DOUBLE_STMT . COMMA DOUBLE_STMT RP  (69)
+
+	COMMA  shift 177
+	.  error
+
+
+state 122
+	max : MAX LP INT_STMT . COMMA INT_STMT RP  (73)
+
+	COMMA  shift 178
+	.  error
+
+
+state 123
+	max : MAX LP DOUBLE_STMT . COMMA DOUBLE_STMT RP  (74)
+
+	COMMA  shift 179
+	.  error
+
+
+state 124
+	min : MIN LP INT_STMT . COMMA INT_STMT RP  (75)
+
+	COMMA  shift 180
+	.  error
+
+
+state 125
+	min : MIN LP DOUBLE_STMT . RP COMMA DOUBLE_STMT RP  (76)
+
+	RP  shift 181
+	.  error
+
+
+state 126
+	sqrt : SQUARE_ROOT LP INT_STMT . RP  (77)
+
+	RP  shift 182
+	.  error
+
+
+state 127
+	sqrt : SQUARE_ROOT LP DOUBLE_STMT . RP  (78)
+
+	RP  shift 183
+	.  error
+
+
+state 128
+	call_parameter : IDENTIFIER .  (133)
+
+	.  reduce 133
+
+
+state 129
+	function_call : IDENTIFIER LP call_parameter . RP SEMICOLON  (86)
+	call_parameter : call_parameter . COMMA IDENTIFIER  (132)
+
+	RP  shift 184
+	COMMA  shift 185
+	.  error
+
+
+state 130
+	factor : term .  (72)
+
+	.  reduce 72
+
+
+state 131
+	arithmetic_operations : arithmetic_operations PLUS divisionAndMultiplication .  (54)
+	divisionAndMultiplication : divisionAndMultiplication . DIVIDE_OP factor  (62)
+	divisionAndMultiplication : divisionAndMultiplication . MULTIPLY_OP factor  (63)
+
+	MULTIPLY_OP  shift 79
+	DIVIDE_OP  shift 80
+	RP  reduce 54
+	SEMICOLON  reduce 54
+	PLUS  reduce 54
+	MINUS  reduce 54
+
+
+state 132
+	divisionAndMultiplication : factor .  (64)
+
+	.  reduce 64
+
+
+state 133
+	arithmetic_operations : arithmetic_operations MINUS divisionAndMultiplication .  (55)
+	divisionAndMultiplication : divisionAndMultiplication . DIVIDE_OP factor  (62)
+	divisionAndMultiplication : divisionAndMultiplication . MULTIPLY_OP factor  (63)
+
+	MULTIPLY_OP  shift 79
+	DIVIDE_OP  shift 80
+	RP  reduce 55
+	SEMICOLON  reduce 55
+	PLUS  reduce 55
+	MINUS  reduce 55
+
+
+state 134
+	args : assignment_values .  (99)
+
+	.  reduce 99
+
+
+state 135
+	args : var .  (98)
+
+	.  reduce 98
+
+
+state 136
+	initialization : term assignment_operator args . SEMICOLON  (93)
+	args : args . arithmetic_operators assignment_values  (96)
+	args : args . arithmetic_operators var  (97)
+
+	SEMICOLON  shift 186
+	PLUS  shift 187
+	MINUS  shift 188
+	MULTIPLY_OP  shift 189
+	DIVIDE_OP  shift 190
+	MOD_OP  shift 191
+	.  error
+
+	arithmetic_operators  goto 192
+
+
+state 137
+	divisionAndMultiplication : divisionAndMultiplication MULTIPLY_OP factor .  (63)
+
+	.  reduce 63
+
+
+state 138
+	divisionAndMultiplication : divisionAndMultiplication DIVIDE_OP factor .  (62)
+
+	.  reduce 62
+
+
+state 139
+	modulo : factor MOD_OP factor .  (65)
+
+	.  reduce 65
+
+
+state 140
+	constant_identifier : CONST term .  (70)
+
+	.  reduce 70
+
+
+state 141
+	function_declaration : types IDENTIFIER LP . parameter RP LCB stmts RETURN assignment_values SEMICOLON RCB  (125)
+	function_declaration : types IDENTIFIER LP . parameter RP LCB stmts RETURN term SEMICOLON RCB  (126)
+	parameter : .  (131)
+
+	INT  shift 111
+	DOUBLE  shift 8
+	STRING  shift 9
+	CHAR  shift 10
+	BOOL  shift 11
+	RP  reduce 131
+	COMMA  reduce 131
+
+	types  goto 174
+	parameter  goto 193
+
+
+state 142
+	declaration : types term SEMICOLON .  (79)
+
+	.  reduce 79
+
+
+state 143
+	declaration_and_initialization : types term assignment_operator . args SEMICOLON  (95)
+
+	PLAYERX  shift 2
+	PLAYERY  shift 3
+	BOOL_STMT  shift 94
+	STRING_STMT  shift 95
+	INT_STMT  shift 96
+	DOUBLE_STMT  shift 97
+	CHAR_STMT  shift 98
+	IDENTIFIER  shift 52
+	.  error
+
+	assignment_values  goto 134
+	var  goto 135
+	args  goto 194
+
+
+state 144
+	declaration : types constant_identifier SEMICOLON .  (80)
+
+	.  reduce 80
+
+
+state 145
+	declaration_and_initialization : types constant_identifier assignment_operator . assignment_values SEMICOLON  (94)
+
+	BOOL_STMT  shift 94
+	STRING_STMT  shift 95
+	INT_STMT  shift 96
+	DOUBLE_STMT  shift 97
+	CHAR_STMT  shift 98
+	.  error
+
+	assignment_values  goto 195
+
+
+state 146
+	function_call : MOVE LP direction RP . SEMICOLON  (87)
+
+	SEMICOLON  shift 196
+	.  error
+
+
+state 147
+	function_call : MOVE LP direction COMMA . INT_STMT RP SEMICOLON  (88)
+
+	INT_STMT  shift 197
+	.  error
+
+
+state 148
+	input_context : term PLUS . input_context  (118)
+
+	PLAYERX  shift 2
+	PLAYERY  shift 3
+	IDENTIFIER  shift 52
+	.  error
+
+	term  goto 92
+	var  goto 43
+	input_context  goto 198
+
+
+state 149
+	input_stmt : EGG_IN LP input_context RP . SEMICOLON  (116)
+
+	SEMICOLON  shift 199
+	.  error
+
+
+state 150
+	output_context : term PLUS . output_context  (122)
+
+	PLAYERX  shift 2
+	PLAYERY  shift 3
+	BOOL_STMT  shift 94
+	STRING_STMT  shift 95
+	INT_STMT  shift 96
+	DOUBLE_STMT  shift 97
+	CHAR_STMT  shift 98
+	IDENTIFIER  shift 52
+	.  error
+
+	term  goto 99
+	assignment_values  goto 100
+	var  goto 43
+	output_context  goto 200
+
+
+state 151
+	output_context : assignment_values PLUS . output_context  (123)
+
+	PLAYERX  shift 2
+	PLAYERY  shift 3
+	BOOL_STMT  shift 94
+	STRING_STMT  shift 95
+	INT_STMT  shift 96
+	DOUBLE_STMT  shift 97
+	CHAR_STMT  shift 98
+	IDENTIFIER  shift 52
+	.  error
+
+	term  goto 99
+	assignment_values  goto 100
+	var  goto 43
+	output_context  goto 201
+
+
+state 152
+	output_stmt : EGG_OUT LP output_context RP . SEMICOLON  (117)
+
+	SEMICOLON  shift 202
+	.  error
+
+
+state 153
+	function_declaration : INT MAIN LP RP . LCB stmts RETURN INT_STMT RCB  (128)
+
+	LCB  shift 203
+	.  error
+
+
+state 154
+	sub_expression : NOT BOOL_STMT .  (40)
+
+	.  reduce 40
+
+
+state 155
+	recursive_expression : recursive_expression . logical_connector single_expression  (29)
+	recursive_expression : LP recursive_expression . RP  (30)
+
+	RP  shift 204
+	AND  shift 158
+	OR  shift 159
+	.  error
+
+	logical_connector  goto 160
+
+
+156: shift/reduce conflict (shift 205, reduce 31) on RP
+state 156
+	recursive_expression : sub_expression .  (31)
+	sub_expression : LP sub_expression . RP  (38)
+
+	RP  shift 205
+	AND  reduce 31
+	OR  reduce 31
+
+
+state 157
+	if_stmt : IF LP logical_expression RP . LCB stmts RCB  (7)
+	if_stmt : IF LP logical_expression RP . LCB stmts RCB ELSE LCB stmts RCB  (8)
+
+	LCB  shift 206
+	.  error
+
+
+state 158
+	logical_connector : AND .  (45)
+
+	.  reduce 45
+
+
+state 159
+	logical_connector : OR .  (46)
+
+	.  reduce 46
+
+
+state 160
+	recursive_expression : recursive_expression logical_connector . single_expression  (29)
+
+	NOT  shift 103
+	LP  shift 207
+	PLAYERX  shift 2
+	PLAYERY  shift 3
+	BOOL_STMT  shift 105
+	IDENTIFIER  shift 52
+	.  error
+
+	single_expression  goto 208
+	sub_expression  goto 209
+	term  goto 110
+	var  goto 43
+
+
+state 161
+	logical_operator : NOT .  (49)
+
+	.  reduce 49
+
+
+state 162
+	logical_operator : IS_EQUAL_OP .  (47)
+
+	.  reduce 47
+
+
+state 163
+	logical_operator : NOT_EQUAL_OP .  (48)
+
+	.  reduce 48
+
+
+state 164
+	logical_operator : GT .  (50)
+
+	.  reduce 50
+
+
+state 165
+	logical_operator : LT .  (51)
+
+	.  reduce 51
+
+
+state 166
+	logical_operator : LTE .  (53)
+
+	.  reduce 53
+
+
+state 167
+	logical_operator : GTE .  (52)
+
+	.  reduce 52
+
+
+state 168
+	sub_expression : term logical_operator . term  (36)
+	sub_expression : term logical_operator . assignment_values  (37)
+
+	PLAYERX  shift 2
+	PLAYERY  shift 3
+	BOOL_STMT  shift 94
+	STRING_STMT  shift 95
+	INT_STMT  shift 96
+	DOUBLE_STMT  shift 97
+	CHAR_STMT  shift 98
+	IDENTIFIER  shift 52
+	.  error
+
+	term  goto 210
+	assignment_values  goto 211
+	var  goto 43
+
+
+state 169
+	for_loop : FOR LP loop_initialization logical_expression . SEMICOLON arithmetic_operations RP LCB stmts RCB  (24)
+
+	SEMICOLON  shift 212
+	.  error
+
+
+state 170
+	declaration_and_initialization : types term . assignment_operator args SEMICOLON  (95)
+
+	ASSIGN_OP  shift 72
+	DIVIDE_ASSIGN_OP  shift 73
+	MULTIPLY_ASSIGN_OP  shift 74
+	MOD_ASSIGN_OP  shift 75
+	PLUS_ASSIGN_OP  shift 76
+	MINUS_ASSIGN_OP  shift 77
+	.  error
+
+	assignment_operator  goto 143
+
+
+state 171
+	declaration_and_initialization : types constant_identifier . assignment_operator assignment_values SEMICOLON  (94)
+
+	ASSIGN_OP  shift 72
+	DIVIDE_ASSIGN_OP  shift 73
+	MULTIPLY_ASSIGN_OP  shift 74
+	MOD_ASSIGN_OP  shift 75
+	PLUS_ASSIGN_OP  shift 76
+	MINUS_ASSIGN_OP  shift 77
+	.  error
+
+	assignment_operator  goto 145
+
+
+state 172
+	while_loop : WHILE LP logical_expression RP . LCB stmts RCB  (23)
+
+	LCB  shift 213
+	.  error
+
+
+state 173
+	do_while_loop : DO LCB stmts RCB . WHILE LP logical_expression RP SEMICOLON  (25)
+
+	WHILE  shift 214
+	.  error
+
+
+state 174
+	parameter : types . IDENTIFIER  (130)
+
+	IDENTIFIER  shift 215
+	.  error
+
+
+state 175
+	function_declaration : VOID IDENTIFIER LP parameter . RP LCB stmts RCB  (124)
+	function_declaration : VOID IDENTIFIER LP parameter . RP LCB stmts RETURN VOID SEMICOLON RCB  (127)
+	parameter : parameter . COMMA types IDENTIFIER  (129)
+
+	RP  shift 216
+	COMMA  shift 217
+	.  error
+
+
+state 176
+	power : POW LP INT_STMT COMMA . INT_STMT RP  (66)
+	power : POW LP INT_STMT COMMA . DOUBLE_STMT RP  (67)
+
+	INT_STMT  shift 218
+	DOUBLE_STMT  shift 219
+	.  error
+
+
+state 177
+	power : POW LP DOUBLE_STMT COMMA . INT_STMT RP  (68)
+	power : POW LP DOUBLE_STMT COMMA . DOUBLE_STMT RP  (69)
+
+	INT_STMT  shift 220
+	DOUBLE_STMT  shift 221
+	.  error
+
+
+state 178
+	max : MAX LP INT_STMT COMMA . INT_STMT RP  (73)
+
+	INT_STMT  shift 222
+	.  error
+
+
+state 179
+	max : MAX LP DOUBLE_STMT COMMA . DOUBLE_STMT RP  (74)
+
+	DOUBLE_STMT  shift 223
+	.  error
+
+
+state 180
+	min : MIN LP INT_STMT COMMA . INT_STMT RP  (75)
+
+	INT_STMT  shift 224
+	.  error
+
+
+state 181
+	min : MIN LP DOUBLE_STMT RP . COMMA DOUBLE_STMT RP  (76)
+
+	COMMA  shift 225
+	.  error
+
+
+state 182
+	sqrt : SQUARE_ROOT LP INT_STMT RP .  (77)
+
+	.  reduce 77
+
+
+state 183
+	sqrt : SQUARE_ROOT LP DOUBLE_STMT RP .  (78)
+
+	.  reduce 78
+
+
+state 184
+	function_call : IDENTIFIER LP call_parameter RP . SEMICOLON  (86)
+
+	SEMICOLON  shift 226
+	.  error
+
+
+state 185
+	call_parameter : call_parameter COMMA . IDENTIFIER  (132)
+
+	IDENTIFIER  shift 227
+	.  error
+
+
+state 186
+	initialization : term assignment_operator args SEMICOLON .  (93)
+
+	.  reduce 93
+
+
+state 187
+	arithmetic_operators : PLUS .  (100)
+
+	.  reduce 100
+
+
+state 188
+	arithmetic_operators : MINUS .  (101)
+
+	.  reduce 101
+
+
+state 189
+	arithmetic_operators : MULTIPLY_OP .  (102)
+
+	.  reduce 102
+
+
+state 190
+	arithmetic_operators : DIVIDE_OP .  (103)
+
+	.  reduce 103
+
+
+state 191
+	arithmetic_operators : MOD_OP .  (104)
+
+	.  reduce 104
+
+
+state 192
+	args : args arithmetic_operators . assignment_values  (96)
+	args : args arithmetic_operators . var  (97)
+
+	PLAYERX  shift 2
+	PLAYERY  shift 3
+	BOOL_STMT  shift 94
+	STRING_STMT  shift 95
+	INT_STMT  shift 96
+	DOUBLE_STMT  shift 97
+	CHAR_STMT  shift 98
+	IDENTIFIER  shift 52
+	.  error
+
+	assignment_values  goto 228
+	var  goto 229
+
+
+state 193
+	function_declaration : types IDENTIFIER LP parameter . RP LCB stmts RETURN assignment_values SEMICOLON RCB  (125)
+	function_declaration : types IDENTIFIER LP parameter . RP LCB stmts RETURN term SEMICOLON RCB  (126)
+	parameter : parameter . COMMA types IDENTIFIER  (129)
+
+	RP  shift 230
+	COMMA  shift 217
+	.  error
+
+
+state 194
+	declaration_and_initialization : types term assignment_operator args . SEMICOLON  (95)
+	args : args . arithmetic_operators assignment_values  (96)
+	args : args . arithmetic_operators var  (97)
+
+	SEMICOLON  shift 231
+	PLUS  shift 187
+	MINUS  shift 188
+	MULTIPLY_OP  shift 189
+	DIVIDE_OP  shift 190
+	MOD_OP  shift 191
+	.  error
+
+	arithmetic_operators  goto 192
+
+
+state 195
+	declaration_and_initialization : types constant_identifier assignment_operator assignment_values . SEMICOLON  (94)
+
+	SEMICOLON  shift 232
+	.  error
+
+
+state 196
+	function_call : MOVE LP direction RP SEMICOLON .  (87)
+
+	.  reduce 87
+
+
+state 197
+	function_call : MOVE LP direction COMMA INT_STMT . RP SEMICOLON  (88)
+
+	RP  shift 233
+	.  error
+
+
+state 198
+	input_context : term PLUS input_context .  (118)
+
+	.  reduce 118
+
+
+state 199
+	input_stmt : EGG_IN LP input_context RP SEMICOLON .  (116)
+
+	.  reduce 116
+
+
+state 200
+	output_context : term PLUS output_context .  (122)
+
+	.  reduce 122
+
+
+state 201
+	output_context : assignment_values PLUS output_context .  (123)
+
+	.  reduce 123
+
+
+state 202
+	output_stmt : EGG_OUT LP output_context RP SEMICOLON .  (117)
+
+	.  reduce 117
+
+
+state 203
+	function_declaration : INT MAIN LP RP LCB . stmts RETURN INT_STMT RCB  (128)
+
+	LP  shift 1
+	PLAYERX  shift 2
+	PLAYERY  shift 3
+	MOVE  shift 4
+	EGG_IN  shift 5
+	EGG_OUT  shift 6
+	INT  shift 7
+	DOUBLE  shift 8
+	STRING  shift 9
+	CHAR  shift 10
+	BOOL  shift 11
+	IF  shift 12
+	FOR  shift 13
+	WHILE  shift 14
+	DO  shift 15
+	VOID  shift 16
+	POW  shift 17
+	MAX  shift 18
+	MIN  shift 19
+	SQUARE_ROOT  shift 20
+	IDENTIFIER  shift 21
+	COMMENT  shift 22
+	LINE_COMMENT  shift 23
+	.  error
+
+	stmts  goto 234
+	stmt  goto 26
+	conditional_stmt  goto 27
+	non_if_stmt  goto 28
+	if_stmt  goto 29
+	loops  goto 30
+	arithmetic_operations  goto 31
+	function_call  goto 32
+	function_declaration  goto 33
+	declaration  goto 34
+	initialization  goto 35
+	declaration_and_initialization  goto 36
+	input_stmt  goto 37
+	output_stmt  goto 38
+	while_loop  goto 39
+	for_loop  goto 40
+	do_while_loop  goto 41
+	term  goto 42
+	var  goto 43
+	divisionAndMultiplication  goto 44
+	modulo  goto 45
+	sqrt  goto 46
+	power  goto 47
+	max  goto 48
+	min  goto 49
+	factor  goto 50
+	types  goto 51
+
+
+state 204
+	recursive_expression : LP recursive_expression RP .  (30)
+
+	.  reduce 30
+
+
+state 205
+	sub_expression : LP sub_expression RP .  (38)
+
+	.  reduce 38
+
+
+state 206
+	if_stmt : IF LP logical_expression RP LCB . stmts RCB  (7)
+	if_stmt : IF LP logical_expression RP LCB . stmts RCB ELSE LCB stmts RCB  (8)
+
+	LP  shift 1
+	PLAYERX  shift 2
+	PLAYERY  shift 3
+	MOVE  shift 4
+	EGG_IN  shift 5
+	EGG_OUT  shift 6
+	INT  shift 7
+	DOUBLE  shift 8
+	STRING  shift 9
+	CHAR  shift 10
+	BOOL  shift 11
+	IF  shift 12
+	FOR  shift 13
+	WHILE  shift 14
+	DO  shift 15
+	VOID  shift 16
+	POW  shift 17
+	MAX  shift 18
+	MIN  shift 19
+	SQUARE_ROOT  shift 20
+	IDENTIFIER  shift 21
+	COMMENT  shift 22
+	LINE_COMMENT  shift 23
+	.  error
+
+	stmts  goto 235
+	stmt  goto 26
+	conditional_stmt  goto 27
+	non_if_stmt  goto 28
+	if_stmt  goto 29
+	loops  goto 30
+	arithmetic_operations  goto 31
+	function_call  goto 32
+	function_declaration  goto 33
+	declaration  goto 34
+	initialization  goto 35
+	declaration_and_initialization  goto 36
+	input_stmt  goto 37
+	output_stmt  goto 38
+	while_loop  goto 39
+	for_loop  goto 40
+	do_while_loop  goto 41
+	term  goto 42
+	var  goto 43
+	divisionAndMultiplication  goto 44
+	modulo  goto 45
+	sqrt  goto 46
+	power  goto 47
+	max  goto 48
+	min  goto 49
+	factor  goto 50
+	types  goto 51
+
+
+state 207
+	single_expression : LP . single_expression logical_connector sub_expression RP  (33)
+	single_expression : LP . single_expression RP  (34)
+	sub_expression : LP . sub_expression RP  (38)
+
+	NOT  shift 103
+	LP  shift 207
+	PLAYERX  shift 2
+	PLAYERY  shift 3
+	BOOL_STMT  shift 105
+	IDENTIFIER  shift 52
+	.  error
+
+	single_expression  goto 236
+	sub_expression  goto 237
+	term  goto 110
+	var  goto 43
+
+
+state 208
+	recursive_expression : recursive_expression logical_connector single_expression .  (29)
+
+	.  reduce 29
+
+
+state 209
+	single_expression : sub_expression .  (35)
+
+	.  reduce 35
+
+
+state 210
+	sub_expression : term logical_operator term .  (36)
+
+	.  reduce 36
+
+
+state 211
+	sub_expression : term logical_operator assignment_values .  (37)
+
+	.  reduce 37
+
+
+state 212
+	for_loop : FOR LP loop_initialization logical_expression SEMICOLON . arithmetic_operations RP LCB stmts RCB  (24)
+
+	LP  shift 1
+	PLAYERX  shift 2
+	PLAYERY  shift 3
+	POW  shift 17
+	MAX  shift 18
+	MIN  shift 19
+	SQUARE_ROOT  shift 20
+	IDENTIFIER  shift 52
+	.  error
+
+	arithmetic_operations  goto 238
+	term  goto 130
+	var  goto 43
+	divisionAndMultiplication  goto 44
+	modulo  goto 45
+	sqrt  goto 46
+	power  goto 47
+	max  goto 48
+	min  goto 49
+	factor  goto 50
+
+
+state 213
+	while_loop : WHILE LP logical_expression RP LCB . stmts RCB  (23)
+
+	LP  shift 1
+	PLAYERX  shift 2
+	PLAYERY  shift 3
+	MOVE  shift 4
+	EGG_IN  shift 5
+	EGG_OUT  shift 6
+	INT  shift 7
+	DOUBLE  shift 8
+	STRING  shift 9
+	CHAR  shift 10
+	BOOL  shift 11
+	IF  shift 12
+	FOR  shift 13
+	WHILE  shift 14
+	DO  shift 15
+	VOID  shift 16
+	POW  shift 17
+	MAX  shift 18
+	MIN  shift 19
+	SQUARE_ROOT  shift 20
+	IDENTIFIER  shift 21
+	COMMENT  shift 22
+	LINE_COMMENT  shift 23
+	.  error
+
+	stmts  goto 239
+	stmt  goto 26
+	conditional_stmt  goto 27
+	non_if_stmt  goto 28
+	if_stmt  goto 29
+	loops  goto 30
+	arithmetic_operations  goto 31
+	function_call  goto 32
+	function_declaration  goto 33
+	declaration  goto 34
+	initialization  goto 35
+	declaration_and_initialization  goto 36
+	input_stmt  goto 37
+	output_stmt  goto 38
+	while_loop  goto 39
+	for_loop  goto 40
+	do_while_loop  goto 41
+	term  goto 42
+	var  goto 43
+	divisionAndMultiplication  goto 44
+	modulo  goto 45
+	sqrt  goto 46
+	power  goto 47
+	max  goto 48
+	min  goto 49
+	factor  goto 50
+	types  goto 51
+
+
+state 214
+	do_while_loop : DO LCB stmts RCB WHILE . LP logical_expression RP SEMICOLON  (25)
+
+	LP  shift 240
+	.  error
+
+
+state 215
+	parameter : types IDENTIFIER .  (130)
+
+	.  reduce 130
+
+
+state 216
+	function_declaration : VOID IDENTIFIER LP parameter RP . LCB stmts RCB  (124)
+	function_declaration : VOID IDENTIFIER LP parameter RP . LCB stmts RETURN VOID SEMICOLON RCB  (127)
+
+	LCB  shift 241
+	.  error
+
+
+state 217
+	parameter : parameter COMMA . types IDENTIFIER  (129)
+
+	INT  shift 111
+	DOUBLE  shift 8
+	STRING  shift 9
+	CHAR  shift 10
+	BOOL  shift 11
+	.  error
+
+	types  goto 242
+
+
+state 218
+	power : POW LP INT_STMT COMMA INT_STMT . RP  (66)
+
+	RP  shift 243
+	.  error
+
+
+state 219
+	power : POW LP INT_STMT COMMA DOUBLE_STMT . RP  (67)
+
+	RP  shift 244
+	.  error
+
+
+state 220
+	power : POW LP DOUBLE_STMT COMMA INT_STMT . RP  (68)
+
+	RP  shift 245
+	.  error
+
+
+state 221
+	power : POW LP DOUBLE_STMT COMMA DOUBLE_STMT . RP  (69)
+
+	RP  shift 246
+	.  error
+
+
+state 222
+	max : MAX LP INT_STMT COMMA INT_STMT . RP  (73)
+
+	RP  shift 247
+	.  error
+
+
+state 223
+	max : MAX LP DOUBLE_STMT COMMA DOUBLE_STMT . RP  (74)
+
+	RP  shift 248
+	.  error
+
+
+state 224
+	min : MIN LP INT_STMT COMMA INT_STMT . RP  (75)
+
+	RP  shift 249
+	.  error
+
+
+state 225
+	min : MIN LP DOUBLE_STMT RP COMMA . DOUBLE_STMT RP  (76)
+
+	DOUBLE_STMT  shift 250
+	.  error
+
+
+state 226
+	function_call : IDENTIFIER LP call_parameter RP SEMICOLON .  (86)
+
+	.  reduce 86
+
+
+state 227
+	call_parameter : call_parameter COMMA IDENTIFIER .  (132)
+
+	.  reduce 132
+
+
+state 228
+	args : args arithmetic_operators assignment_values .  (96)
+
+	.  reduce 96
+
+
+state 229
+	args : args arithmetic_operators var .  (97)
+
+	.  reduce 97
+
+
+state 230
+	function_declaration : types IDENTIFIER LP parameter RP . LCB stmts RETURN assignment_values SEMICOLON RCB  (125)
+	function_declaration : types IDENTIFIER LP parameter RP . LCB stmts RETURN term SEMICOLON RCB  (126)
+
+	LCB  shift 251
+	.  error
+
+
+state 231
+	declaration_and_initialization : types term assignment_operator args SEMICOLON .  (95)
+
+	.  reduce 95
+
+
+state 232
+	declaration_and_initialization : types constant_identifier assignment_operator assignment_values SEMICOLON .  (94)
+
+	.  reduce 94
+
+
+state 233
+	function_call : MOVE LP direction COMMA INT_STMT RP . SEMICOLON  (88)
+
+	SEMICOLON  shift 252
+	.  error
+
+
+state 234
+	stmts : stmts . stmt  (3)
+	function_declaration : INT MAIN LP RP LCB stmts . RETURN INT_STMT RCB  (128)
+
+	LP  shift 1
+	PLAYERX  shift 2
+	PLAYERY  shift 3
+	MOVE  shift 4
+	EGG_IN  shift 5
+	EGG_OUT  shift 6
+	INT  shift 7
+	DOUBLE  shift 8
+	STRING  shift 9
+	CHAR  shift 10
+	BOOL  shift 11
+	IF  shift 12
+	FOR  shift 13
+	WHILE  shift 14
+	DO  shift 15
+	VOID  shift 16
+	RETURN  shift 253
+	POW  shift 17
+	MAX  shift 18
+	MIN  shift 19
+	SQUARE_ROOT  shift 20
+	IDENTIFIER  shift 21
+	COMMENT  shift 22
+	LINE_COMMENT  shift 23
+	.  error
+
+	stmt  goto 68
+	conditional_stmt  goto 27
+	non_if_stmt  goto 28
+	if_stmt  goto 29
+	loops  goto 30
+	arithmetic_operations  goto 31
+	function_call  goto 32
+	function_declaration  goto 33
+	declaration  goto 34
+	initialization  goto 35
+	declaration_and_initialization  goto 36
+	input_stmt  goto 37
+	output_stmt  goto 38
+	while_loop  goto 39
+	for_loop  goto 40
+	do_while_loop  goto 41
+	term  goto 42
+	var  goto 43
+	divisionAndMultiplication  goto 44
+	modulo  goto 45
+	sqrt  goto 46
+	power  goto 47
+	max  goto 48
+	min  goto 49
+	factor  goto 50
+	types  goto 51
+
+
+state 235
+	stmts : stmts . stmt  (3)
+	if_stmt : IF LP logical_expression RP LCB stmts . RCB  (7)
+	if_stmt : IF LP logical_expression RP LCB stmts . RCB ELSE LCB stmts RCB  (8)
+
+	LP  shift 1
+	RCB  shift 254
+	PLAYERX  shift 2
+	PLAYERY  shift 3
+	MOVE  shift 4
+	EGG_IN  shift 5
+	EGG_OUT  shift 6
+	INT  shift 7
+	DOUBLE  shift 8
+	STRING  shift 9
+	CHAR  shift 10
+	BOOL  shift 11
+	IF  shift 12
+	FOR  shift 13
+	WHILE  shift 14
+	DO  shift 15
+	VOID  shift 16
+	POW  shift 17
+	MAX  shift 18
+	MIN  shift 19
+	SQUARE_ROOT  shift 20
+	IDENTIFIER  shift 21
+	COMMENT  shift 22
+	LINE_COMMENT  shift 23
+	.  error
+
+	stmt  goto 68
+	conditional_stmt  goto 27
+	non_if_stmt  goto 28
+	if_stmt  goto 29
+	loops  goto 30
+	arithmetic_operations  goto 31
+	function_call  goto 32
+	function_declaration  goto 33
+	declaration  goto 34
+	initialization  goto 35
+	declaration_and_initialization  goto 36
+	input_stmt  goto 37
+	output_stmt  goto 38
+	while_loop  goto 39
+	for_loop  goto 40
+	do_while_loop  goto 41
+	term  goto 42
+	var  goto 43
+	divisionAndMultiplication  goto 44
+	modulo  goto 45
+	sqrt  goto 46
+	power  goto 47
+	max  goto 48
+	min  goto 49
+	factor  goto 50
+	types  goto 51
+
+
+state 236
+	single_expression : LP single_expression . logical_connector sub_expression RP  (33)
+	single_expression : LP single_expression . RP  (34)
+
+	RP  shift 255
+	AND  shift 158
+	OR  shift 159
+	.  error
+
+	logical_connector  goto 256
+
+
+237: shift/reduce conflict (shift 205, reduce 35) on RP
+state 237
+	single_expression : sub_expression .  (35)
+	sub_expression : LP sub_expression . RP  (38)
+
+	RP  shift 205
+	AND  reduce 35
+	OR  reduce 35
+
+
+state 238
+	for_loop : FOR LP loop_initialization logical_expression SEMICOLON arithmetic_operations . RP LCB stmts RCB  (24)
+	arithmetic_operations : arithmetic_operations . PLUS divisionAndMultiplication  (54)
+	arithmetic_operations : arithmetic_operations . MINUS divisionAndMultiplication  (55)
+
+	RP  shift 257
+	PLUS  shift 70
+	MINUS  shift 71
+	.  error
+
+
+state 239
+	stmts : stmts . stmt  (3)
+	while_loop : WHILE LP logical_expression RP LCB stmts . RCB  (23)
+
+	LP  shift 1
+	RCB  shift 258
+	PLAYERX  shift 2
+	PLAYERY  shift 3
+	MOVE  shift 4
+	EGG_IN  shift 5
+	EGG_OUT  shift 6
+	INT  shift 7
+	DOUBLE  shift 8
+	STRING  shift 9
+	CHAR  shift 10
+	BOOL  shift 11
+	IF  shift 12
+	FOR  shift 13
+	WHILE  shift 14
+	DO  shift 15
+	VOID  shift 16
+	POW  shift 17
+	MAX  shift 18
+	MIN  shift 19
+	SQUARE_ROOT  shift 20
+	IDENTIFIER  shift 21
+	COMMENT  shift 22
+	LINE_COMMENT  shift 23
+	.  error
+
+	stmt  goto 68
+	conditional_stmt  goto 27
+	non_if_stmt  goto 28
+	if_stmt  goto 29
+	loops  goto 30
+	arithmetic_operations  goto 31
+	function_call  goto 32
+	function_declaration  goto 33
+	declaration  goto 34
+	initialization  goto 35
+	declaration_and_initialization  goto 36
+	input_stmt  goto 37
+	output_stmt  goto 38
+	while_loop  goto 39
+	for_loop  goto 40
+	do_while_loop  goto 41
+	term  goto 42
+	var  goto 43
+	divisionAndMultiplication  goto 44
+	modulo  goto 45
+	sqrt  goto 46
+	power  goto 47
+	max  goto 48
+	min  goto 49
+	factor  goto 50
+	types  goto 51
+
+
+state 240
+	do_while_loop : DO LCB stmts RCB WHILE LP . logical_expression RP SEMICOLON  (25)
+
+	NOT  shift 103
+	LP  shift 104
+	PLAYERX  shift 2
+	PLAYERY  shift 3
+	BOOL_STMT  shift 105
+	IDENTIFIER  shift 106
+	.  error
+
+	logical_expression  goto 259
+	recursive_expression  goto 108
+	sub_expression  goto 109
+	term  goto 110
+	var  goto 43
+
+
+state 241
+	function_declaration : VOID IDENTIFIER LP parameter RP LCB . stmts RCB  (124)
+	function_declaration : VOID IDENTIFIER LP parameter RP LCB . stmts RETURN VOID SEMICOLON RCB  (127)
+
+	LP  shift 1
+	PLAYERX  shift 2
+	PLAYERY  shift 3
+	MOVE  shift 4
+	EGG_IN  shift 5
+	EGG_OUT  shift 6
+	INT  shift 7
+	DOUBLE  shift 8
+	STRING  shift 9
+	CHAR  shift 10
+	BOOL  shift 11
+	IF  shift 12
+	FOR  shift 13
+	WHILE  shift 14
+	DO  shift 15
+	VOID  shift 16
+	POW  shift 17
+	MAX  shift 18
+	MIN  shift 19
+	SQUARE_ROOT  shift 20
+	IDENTIFIER  shift 21
+	COMMENT  shift 22
+	LINE_COMMENT  shift 23
+	.  error
+
+	stmts  goto 260
+	stmt  goto 26
+	conditional_stmt  goto 27
+	non_if_stmt  goto 28
+	if_stmt  goto 29
+	loops  goto 30
+	arithmetic_operations  goto 31
+	function_call  goto 32
+	function_declaration  goto 33
+	declaration  goto 34
+	initialization  goto 35
+	declaration_and_initialization  goto 36
+	input_stmt  goto 37
+	output_stmt  goto 38
+	while_loop  goto 39
+	for_loop  goto 40
+	do_while_loop  goto 41
+	term  goto 42
+	var  goto 43
+	divisionAndMultiplication  goto 44
+	modulo  goto 45
+	sqrt  goto 46
+	power  goto 47
+	max  goto 48
+	min  goto 49
+	factor  goto 50
+	types  goto 51
+
+
+state 242
+	parameter : parameter COMMA types . IDENTIFIER  (129)
+
+	IDENTIFIER  shift 261
+	.  error
+
+
+state 243
+	power : POW LP INT_STMT COMMA INT_STMT RP .  (66)
+
+	.  reduce 66
+
+
+state 244
+	power : POW LP INT_STMT COMMA DOUBLE_STMT RP .  (67)
+
+	.  reduce 67
+
+
+state 245
+	power : POW LP DOUBLE_STMT COMMA INT_STMT RP .  (68)
+
+	.  reduce 68
+
+
+state 246
+	power : POW LP DOUBLE_STMT COMMA DOUBLE_STMT RP .  (69)
+
+	.  reduce 69
+
+
+state 247
+	max : MAX LP INT_STMT COMMA INT_STMT RP .  (73)
+
+	.  reduce 73
+
+
+state 248
+	max : MAX LP DOUBLE_STMT COMMA DOUBLE_STMT RP .  (74)
+
+	.  reduce 74
+
+
+state 249
+	min : MIN LP INT_STMT COMMA INT_STMT RP .  (75)
+
+	.  reduce 75
+
+
+state 250
+	min : MIN LP DOUBLE_STMT RP COMMA DOUBLE_STMT . RP  (76)
+
+	RP  shift 262
+	.  error
+
+
+state 251
+	function_declaration : types IDENTIFIER LP parameter RP LCB . stmts RETURN assignment_values SEMICOLON RCB  (125)
+	function_declaration : types IDENTIFIER LP parameter RP LCB . stmts RETURN term SEMICOLON RCB  (126)
+
+	LP  shift 1
+	PLAYERX  shift 2
+	PLAYERY  shift 3
+	MOVE  shift 4
+	EGG_IN  shift 5
+	EGG_OUT  shift 6
+	INT  shift 7
+	DOUBLE  shift 8
+	STRING  shift 9
+	CHAR  shift 10
+	BOOL  shift 11
+	IF  shift 12
+	FOR  shift 13
+	WHILE  shift 14
+	DO  shift 15
+	VOID  shift 16
+	POW  shift 17
+	MAX  shift 18
+	MIN  shift 19
+	SQUARE_ROOT  shift 20
+	IDENTIFIER  shift 21
+	COMMENT  shift 22
+	LINE_COMMENT  shift 23
+	.  error
+
+	stmts  goto 263
+	stmt  goto 26
+	conditional_stmt  goto 27
+	non_if_stmt  goto 28
+	if_stmt  goto 29
+	loops  goto 30
+	arithmetic_operations  goto 31
+	function_call  goto 32
+	function_declaration  goto 33
+	declaration  goto 34
+	initialization  goto 35
+	declaration_and_initialization  goto 36
+	input_stmt  goto 37
+	output_stmt  goto 38
+	while_loop  goto 39
+	for_loop  goto 40
+	do_while_loop  goto 41
+	term  goto 42
+	var  goto 43
+	divisionAndMultiplication  goto 44
+	modulo  goto 45
+	sqrt  goto 46
+	power  goto 47
+	max  goto 48
+	min  goto 49
+	factor  goto 50
+	types  goto 51
+
+
+state 252
+	function_call : MOVE LP direction COMMA INT_STMT RP SEMICOLON .  (88)
+
+	.  reduce 88
+
+
+state 253
+	function_declaration : INT MAIN LP RP LCB stmts RETURN . INT_STMT RCB  (128)
+
+	INT_STMT  shift 264
+	.  error
+
+
+state 254
+	if_stmt : IF LP logical_expression RP LCB stmts RCB .  (7)
+	if_stmt : IF LP logical_expression RP LCB stmts RCB . ELSE LCB stmts RCB  (8)
+
+	ELSE  shift 265
+	$end  reduce 7
+	LP  reduce 7
+	RCB  reduce 7
+	PLAYERX  reduce 7
+	PLAYERY  reduce 7
+	MOVE  reduce 7
+	EGG_IN  reduce 7
+	EGG_OUT  reduce 7
+	INT  reduce 7
+	DOUBLE  reduce 7
+	STRING  reduce 7
+	CHAR  reduce 7
+	BOOL  reduce 7
+	IF  reduce 7
+	FOR  reduce 7
+	WHILE  reduce 7
+	DO  reduce 7
+	VOID  reduce 7
+	RETURN  reduce 7
+	POW  reduce 7
+	MAX  reduce 7
+	MIN  reduce 7
+	SQUARE_ROOT  reduce 7
+	IDENTIFIER  reduce 7
+	COMMENT  reduce 7
+	LINE_COMMENT  reduce 7
+
+
+state 255
+	single_expression : LP single_expression RP .  (34)
+
+	.  reduce 34
+
+
+state 256
+	single_expression : LP single_expression logical_connector . sub_expression RP  (33)
+
+	NOT  shift 103
+	LP  shift 266
+	PLAYERX  shift 2
+	PLAYERY  shift 3
+	BOOL_STMT  shift 105
+	IDENTIFIER  shift 52
+	.  error
+
+	sub_expression  goto 267
+	term  goto 110
+	var  goto 43
+
+
+state 257
+	for_loop : FOR LP loop_initialization logical_expression SEMICOLON arithmetic_operations RP . LCB stmts RCB  (24)
+
+	LCB  shift 268
+	.  error
+
+
+state 258
+	while_loop : WHILE LP logical_expression RP LCB stmts RCB .  (23)
+
+	.  reduce 23
+
+
+state 259
+	do_while_loop : DO LCB stmts RCB WHILE LP logical_expression . RP SEMICOLON  (25)
+
+	RP  shift 269
+	.  error
+
+
+state 260
+	stmts : stmts . stmt  (3)
+	function_declaration : VOID IDENTIFIER LP parameter RP LCB stmts . RCB  (124)
+	function_declaration : VOID IDENTIFIER LP parameter RP LCB stmts . RETURN VOID SEMICOLON RCB  (127)
+
+	LP  shift 1
+	RCB  shift 270
+	PLAYERX  shift 2
+	PLAYERY  shift 3
+	MOVE  shift 4
+	EGG_IN  shift 5
+	EGG_OUT  shift 6
+	INT  shift 7
+	DOUBLE  shift 8
+	STRING  shift 9
+	CHAR  shift 10
+	BOOL  shift 11
+	IF  shift 12
+	FOR  shift 13
+	WHILE  shift 14
+	DO  shift 15
+	VOID  shift 16
+	RETURN  shift 271
+	POW  shift 17
+	MAX  shift 18
+	MIN  shift 19
+	SQUARE_ROOT  shift 20
+	IDENTIFIER  shift 21
+	COMMENT  shift 22
+	LINE_COMMENT  shift 23
+	.  error
+
+	stmt  goto 68
+	conditional_stmt  goto 27
+	non_if_stmt  goto 28
+	if_stmt  goto 29
+	loops  goto 30
+	arithmetic_operations  goto 31
+	function_call  goto 32
+	function_declaration  goto 33
+	declaration  goto 34
+	initialization  goto 35
+	declaration_and_initialization  goto 36
+	input_stmt  goto 37
+	output_stmt  goto 38
+	while_loop  goto 39
+	for_loop  goto 40
+	do_while_loop  goto 41
+	term  goto 42
+	var  goto 43
+	divisionAndMultiplication  goto 44
+	modulo  goto 45
+	sqrt  goto 46
+	power  goto 47
+	max  goto 48
+	min  goto 49
+	factor  goto 50
+	types  goto 51
+
+
+state 261
+	parameter : parameter COMMA types IDENTIFIER .  (129)
+
+	.  reduce 129
+
+
+state 262
+	min : MIN LP DOUBLE_STMT RP COMMA DOUBLE_STMT RP .  (76)
+
+	.  reduce 76
+
+
+state 263
+	stmts : stmts . stmt  (3)
+	function_declaration : types IDENTIFIER LP parameter RP LCB stmts . RETURN assignment_values SEMICOLON RCB  (125)
+	function_declaration : types IDENTIFIER LP parameter RP LCB stmts . RETURN term SEMICOLON RCB  (126)
+
+	LP  shift 1
+	PLAYERX  shift 2
+	PLAYERY  shift 3
+	MOVE  shift 4
+	EGG_IN  shift 5
+	EGG_OUT  shift 6
+	INT  shift 7
+	DOUBLE  shift 8
+	STRING  shift 9
+	CHAR  shift 10
+	BOOL  shift 11
+	IF  shift 12
+	FOR  shift 13
+	WHILE  shift 14
+	DO  shift 15
+	VOID  shift 16
+	RETURN  shift 272
+	POW  shift 17
+	MAX  shift 18
+	MIN  shift 19
+	SQUARE_ROOT  shift 20
+	IDENTIFIER  shift 21
+	COMMENT  shift 22
+	LINE_COMMENT  shift 23
+	.  error
+
+	stmt  goto 68
+	conditional_stmt  goto 27
+	non_if_stmt  goto 28
+	if_stmt  goto 29
+	loops  goto 30
+	arithmetic_operations  goto 31
+	function_call  goto 32
+	function_declaration  goto 33
+	declaration  goto 34
+	initialization  goto 35
+	declaration_and_initialization  goto 36
+	input_stmt  goto 37
+	output_stmt  goto 38
+	while_loop  goto 39
+	for_loop  goto 40
+	do_while_loop  goto 41
+	term  goto 42
+	var  goto 43
+	divisionAndMultiplication  goto 44
+	modulo  goto 45
+	sqrt  goto 46
+	power  goto 47
+	max  goto 48
+	min  goto 49
+	factor  goto 50
+	types  goto 51
+
+
+state 264
+	function_declaration : INT MAIN LP RP LCB stmts RETURN INT_STMT . RCB  (128)
+
+	RCB  shift 273
+	.  error
+
+
+state 265
+	if_stmt : IF LP logical_expression RP LCB stmts RCB ELSE . LCB stmts RCB  (8)
+
+	LCB  shift 274
+	.  error
+
+
+state 266
+	sub_expression : LP . sub_expression RP  (38)
+
+	NOT  shift 103
+	LP  shift 266
+	PLAYERX  shift 2
+	PLAYERY  shift 3
+	BOOL_STMT  shift 105
+	IDENTIFIER  shift 52
+	.  error
+
+	sub_expression  goto 275
+	term  goto 110
+	var  goto 43
+
+
+state 267
+	single_expression : LP single_expression logical_connector sub_expression . RP  (33)
+
+	RP  shift 276
+	.  error
+
+
+state 268
+	for_loop : FOR LP loop_initialization logical_expression SEMICOLON arithmetic_operations RP LCB . stmts RCB  (24)
+
+	LP  shift 1
+	PLAYERX  shift 2
+	PLAYERY  shift 3
+	MOVE  shift 4
+	EGG_IN  shift 5
+	EGG_OUT  shift 6
+	INT  shift 7
+	DOUBLE  shift 8
+	STRING  shift 9
+	CHAR  shift 10
+	BOOL  shift 11
+	IF  shift 12
+	FOR  shift 13
+	WHILE  shift 14
+	DO  shift 15
+	VOID  shift 16
+	POW  shift 17
+	MAX  shift 18
+	MIN  shift 19
+	SQUARE_ROOT  shift 20
+	IDENTIFIER  shift 21
+	COMMENT  shift 22
+	LINE_COMMENT  shift 23
+	.  error
+
+	stmts  goto 277
+	stmt  goto 26
+	conditional_stmt  goto 27
+	non_if_stmt  goto 28
+	if_stmt  goto 29
+	loops  goto 30
+	arithmetic_operations  goto 31
+	function_call  goto 32
+	function_declaration  goto 33
+	declaration  goto 34
+	initialization  goto 35
+	declaration_and_initialization  goto 36
+	input_stmt  goto 37
+	output_stmt  goto 38
+	while_loop  goto 39
+	for_loop  goto 40
+	do_while_loop  goto 41
+	term  goto 42
+	var  goto 43
+	divisionAndMultiplication  goto 44
+	modulo  goto 45
+	sqrt  goto 46
+	power  goto 47
+	max  goto 48
+	min  goto 49
+	factor  goto 50
+	types  goto 51
+
+
+state 269
+	do_while_loop : DO LCB stmts RCB WHILE LP logical_expression RP . SEMICOLON  (25)
+
+	SEMICOLON  shift 278
+	.  error
+
+
+state 270
+	function_declaration : VOID IDENTIFIER LP parameter RP LCB stmts RCB .  (124)
+
+	.  reduce 124
+
+
+state 271
+	function_declaration : VOID IDENTIFIER LP parameter RP LCB stmts RETURN . VOID SEMICOLON RCB  (127)
+
+	VOID  shift 279
+	.  error
+
+
+state 272
+	function_declaration : types IDENTIFIER LP parameter RP LCB stmts RETURN . assignment_values SEMICOLON RCB  (125)
+	function_declaration : types IDENTIFIER LP parameter RP LCB stmts RETURN . term SEMICOLON RCB  (126)
+
+	PLAYERX  shift 2
+	PLAYERY  shift 3
+	BOOL_STMT  shift 94
+	STRING_STMT  shift 95
+	INT_STMT  shift 96
+	DOUBLE_STMT  shift 97
+	CHAR_STMT  shift 98
+	IDENTIFIER  shift 52
+	.  error
+
+	term  goto 280
+	assignment_values  goto 281
+	var  goto 43
+
+
+state 273
+	function_declaration : INT MAIN LP RP LCB stmts RETURN INT_STMT RCB .  (128)
+
+	.  reduce 128
+
+
+state 274
+	if_stmt : IF LP logical_expression RP LCB stmts RCB ELSE LCB . stmts RCB  (8)
+
+	LP  shift 1
+	PLAYERX  shift 2
+	PLAYERY  shift 3
+	MOVE  shift 4
+	EGG_IN  shift 5
+	EGG_OUT  shift 6
+	INT  shift 7
+	DOUBLE  shift 8
+	STRING  shift 9
+	CHAR  shift 10
+	BOOL  shift 11
+	IF  shift 12
+	FOR  shift 13
+	WHILE  shift 14
+	DO  shift 15
+	VOID  shift 16
+	POW  shift 17
+	MAX  shift 18
+	MIN  shift 19
+	SQUARE_ROOT  shift 20
+	IDENTIFIER  shift 21
+	COMMENT  shift 22
+	LINE_COMMENT  shift 23
+	.  error
+
+	stmts  goto 282
+	stmt  goto 26
+	conditional_stmt  goto 27
+	non_if_stmt  goto 28
+	if_stmt  goto 29
+	loops  goto 30
+	arithmetic_operations  goto 31
+	function_call  goto 32
+	function_declaration  goto 33
+	declaration  goto 34
+	initialization  goto 35
+	declaration_and_initialization  goto 36
+	input_stmt  goto 37
+	output_stmt  goto 38
+	while_loop  goto 39
+	for_loop  goto 40
+	do_while_loop  goto 41
+	term  goto 42
+	var  goto 43
+	divisionAndMultiplication  goto 44
+	modulo  goto 45
+	sqrt  goto 46
+	power  goto 47
+	max  goto 48
+	min  goto 49
+	factor  goto 50
+	types  goto 51
+
+
+state 275
+	sub_expression : LP sub_expression . RP  (38)
+
+	RP  shift 205
+	.  error
+
+
+state 276
+	single_expression : LP single_expression logical_connector sub_expression RP .  (33)
+
+	.  reduce 33
+
+
+state 277
+	stmts : stmts . stmt  (3)
+	for_loop : FOR LP loop_initialization logical_expression SEMICOLON arithmetic_operations RP LCB stmts . RCB  (24)
+
+	LP  shift 1
+	RCB  shift 283
+	PLAYERX  shift 2
+	PLAYERY  shift 3
+	MOVE  shift 4
+	EGG_IN  shift 5
+	EGG_OUT  shift 6
+	INT  shift 7
+	DOUBLE  shift 8
+	STRING  shift 9
+	CHAR  shift 10
+	BOOL  shift 11
+	IF  shift 12
+	FOR  shift 13
+	WHILE  shift 14
+	DO  shift 15
+	VOID  shift 16
+	POW  shift 17
+	MAX  shift 18
+	MIN  shift 19
+	SQUARE_ROOT  shift 20
+	IDENTIFIER  shift 21
+	COMMENT  shift 22
+	LINE_COMMENT  shift 23
+	.  error
+
+	stmt  goto 68
+	conditional_stmt  goto 27
+	non_if_stmt  goto 28
+	if_stmt  goto 29
+	loops  goto 30
+	arithmetic_operations  goto 31
+	function_call  goto 32
+	function_declaration  goto 33
+	declaration  goto 34
+	initialization  goto 35
+	declaration_and_initialization  goto 36
+	input_stmt  goto 37
+	output_stmt  goto 38
+	while_loop  goto 39
+	for_loop  goto 40
+	do_while_loop  goto 41
+	term  goto 42
+	var  goto 43
+	divisionAndMultiplication  goto 44
+	modulo  goto 45
+	sqrt  goto 46
+	power  goto 47
+	max  goto 48
+	min  goto 49
+	factor  goto 50
+	types  goto 51
+
+
+state 278
+	do_while_loop : DO LCB stmts RCB WHILE LP logical_expression RP SEMICOLON .  (25)
+
+	.  reduce 25
+
+
+state 279
+	function_declaration : VOID IDENTIFIER LP parameter RP LCB stmts RETURN VOID . SEMICOLON RCB  (127)
+
+	SEMICOLON  shift 284
+	.  error
+
+
+state 280
+	function_declaration : types IDENTIFIER LP parameter RP LCB stmts RETURN term . SEMICOLON RCB  (126)
+
+	SEMICOLON  shift 285
+	.  error
+
+
+state 281
+	function_declaration : types IDENTIFIER LP parameter RP LCB stmts RETURN assignment_values . SEMICOLON RCB  (125)
+
+	SEMICOLON  shift 286
+	.  error
+
+
+state 282
+	stmts : stmts . stmt  (3)
+	if_stmt : IF LP logical_expression RP LCB stmts RCB ELSE LCB stmts . RCB  (8)
+
+	LP  shift 1
+	RCB  shift 287
+	PLAYERX  shift 2
+	PLAYERY  shift 3
+	MOVE  shift 4
+	EGG_IN  shift 5
+	EGG_OUT  shift 6
+	INT  shift 7
+	DOUBLE  shift 8
+	STRING  shift 9
+	CHAR  shift 10
+	BOOL  shift 11
+	IF  shift 12
+	FOR  shift 13
+	WHILE  shift 14
+	DO  shift 15
+	VOID  shift 16
+	POW  shift 17
+	MAX  shift 18
+	MIN  shift 19
+	SQUARE_ROOT  shift 20
+	IDENTIFIER  shift 21
+	COMMENT  shift 22
+	LINE_COMMENT  shift 23
+	.  error
+
+	stmt  goto 68
+	conditional_stmt  goto 27
+	non_if_stmt  goto 28
+	if_stmt  goto 29
+	loops  goto 30
+	arithmetic_operations  goto 31
+	function_call  goto 32
+	function_declaration  goto 33
+	declaration  goto 34
+	initialization  goto 35
+	declaration_and_initialization  goto 36
+	input_stmt  goto 37
+	output_stmt  goto 38
+	while_loop  goto 39
+	for_loop  goto 40
+	do_while_loop  goto 41
+	term  goto 42
+	var  goto 43
+	divisionAndMultiplication  goto 44
+	modulo  goto 45
+	sqrt  goto 46
+	power  goto 47
+	max  goto 48
+	min  goto 49
+	factor  goto 50
+	types  goto 51
+
+
+state 283
+	for_loop : FOR LP loop_initialization logical_expression SEMICOLON arithmetic_operations RP LCB stmts RCB .  (24)
+
+	.  reduce 24
+
+
+state 284
+	function_declaration : VOID IDENTIFIER LP parameter RP LCB stmts RETURN VOID SEMICOLON . RCB  (127)
+
+	RCB  shift 288
+	.  error
+
+
+state 285
+	function_declaration : types IDENTIFIER LP parameter RP LCB stmts RETURN term SEMICOLON . RCB  (126)
+
+	RCB  shift 289
+	.  error
+
+
+state 286
+	function_declaration : types IDENTIFIER LP parameter RP LCB stmts RETURN assignment_values SEMICOLON . RCB  (125)
+
+	RCB  shift 290
+	.  error
+
+
+state 287
+	if_stmt : IF LP logical_expression RP LCB stmts RCB ELSE LCB stmts RCB .  (8)
+
+	.  reduce 8
+
+
+state 288
+	function_declaration : VOID IDENTIFIER LP parameter RP LCB stmts RETURN VOID SEMICOLON RCB .  (127)
+
+	.  reduce 127
+
+
+state 289
+	function_declaration : types IDENTIFIER LP parameter RP LCB stmts RETURN term SEMICOLON RCB .  (126)
+
+	.  reduce 126
+
+
+state 290
+	function_declaration : types IDENTIFIER LP parameter RP LCB stmts RETURN assignment_values SEMICOLON RCB .  (125)
+
+	.  reduce 125
+
+
+State 156 contains 1 shift/reduce conflict.
+State 237 contains 1 shift/reduce conflict.
+
+
+69 terminals, 46 nonterminals
+135 grammar rules, 291 states
