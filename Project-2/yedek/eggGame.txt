@@ -157,8 +157,8 @@ int main(){
 			game = false;
 		}
 	}
-
-	eggout("Your score is " + ((2 * heroWhealth) + (3 * heroStrength)) + \n);
+	int score = ((2 * heroWhealth) + (3 * heroStrength));
+	eggout("Your score is " + score + \n);
 
 	return 0;
 }

@@ -128,9 +128,8 @@ recursive_expression:
 	|recursive_expression logical_connector single_expression
 
 single_expression: 
-	term logical_operator term
+	term logical_operator arithmetic_operations
 	|LP logical_expression RP
-	|term logical_operator assignment_values
 	| BOOL_STMT
 	| term
 	| NOT term
@@ -172,7 +171,6 @@ divisionAndMultiplication:
 	|divisionAndMultiplication MULTIPLY_OP factor
 	| factor
  
-
 modulo:
 	factor MOD_OP factor
 
@@ -184,7 +182,6 @@ power:
 
 constant_identifier:
 	CONST term
-
 
 factor:
 	term
@@ -218,27 +215,14 @@ function_call:
 direction:
 	WEST | SOUTH | EAST | NORTH
 
-initialization: 
-	term assignment_operator args SEMICOLON
+initialization:
+	term assignment_operator arithmetic_operations SEMICOLON
 	|term assignment_operator function_call
 
 declaration_and_initialization:
 	types constant_identifier assignment_operator assignment_values SEMICOLON
-	| types term assignment_operator args SEMICOLON
+	| types term assignment_operator arithmetic_operations SEMICOLON
 	| types term assignment_operator function_call
-
-args:
-	args arithmetic_operators assignment_values
-	| args arithmetic_operators var
-	| var
-	| assignment_values
-
-arithmetic_operators:
-	PLUS
-	|MINUS
-	|MULTIPLY_OP
-	|DIVIDE_OP
-	|MOD_OP	
 
 assignment_operator: 
 	ASSIGN_OP
@@ -276,7 +260,7 @@ function_declaration:
 	| types IDENTIFIER LP parameter RP LCB stmts RETURN assignment_values SEMICOLON RCB
 	| types IDENTIFIER LP parameter RP LCB stmts RETURN term SEMICOLON RCB  
 	| VOID IDENTIFIER LP parameter RP LCB stmts RETURN VOID SEMICOLON RCB
-	| INT MAIN LP RP LCB stmts RETURN INT_STMT RCB
+	| INT MAIN LP RP LCB stmts RETURN INT_STMT SEMICOLON RCB
 
 parameter:
 	parameter COMMA types IDENTIFIER
