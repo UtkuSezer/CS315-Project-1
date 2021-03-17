@@ -124,20 +124,16 @@ logical_expression:
 	recursive_expression
 
 recursive_expression: 
-	recursive_expression logical_connector single_expression
-	| LP recursive_expression RP
-	| sub_expression
-	| IDENTIFIER
+	single_expression
+	|recursive_expression logical_connector single_expression
 
 single_expression: 
-	LP single_expression logical_connector sub_expression RP
-	|LP single_expression RP
-	|sub_expression
-
-sub_expression:
 	term logical_operator term
-	| term logical_operator assignment_values
+	|LP logical_expression RP
+	|term logical_operator assignment_values
 	| BOOL_STMT
+	| term
+	| NOT term
 	| NOT BOOL_STMT
 
 term:
@@ -191,8 +187,9 @@ constant_identifier:
 
 
 factor:
-	LP term RP
-	| term
+	term
+	|assignment_values
+	| LP arithmetic_operations RP
 
 max:
 	MAX LP INT_STMT COMMA INT_STMT RP 
@@ -223,10 +220,12 @@ direction:
 
 initialization: 
 	term assignment_operator args SEMICOLON
+	|term assignment_operator function_call
 
 declaration_and_initialization:
 	types constant_identifier assignment_operator assignment_values SEMICOLON
 	| types term assignment_operator args SEMICOLON
+	| types term assignment_operator function_call
 
 args:
 	args arithmetic_operators assignment_values
