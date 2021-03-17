@@ -113,7 +113,7 @@ while_loop:
 	WHILE LP logical_expression RP LCB stmts RCB
 
 for_loop:
-	FOR LP loop_initialization logical_expression SEMICOLON arithmetic_operations RP LCB stmts RCB
+	FOR LP loop_initialization logical_expression SEMICOLON loop_arithmetic RP LCB stmts RCB
 
 do_while_loop:
 	DO LCB stmts RCB WHILE LP logical_expression RP SEMICOLON
@@ -121,6 +121,9 @@ do_while_loop:
 loop_initialization:
 	initialization
 	| declaration_and_initialization
+
+ loop_arithmetic:
+	term assignment_operator arithmetic_operations
 
 logical_expression:
 	recursive_expression
@@ -176,12 +179,6 @@ divisionAndMultiplication:
 modulo:
 	factor MOD_OP factor
 
-power: 
-	POW LP INT_STMT COMMA INT_STMT RP
-	| POW LP INT_STMT COMMA DOUBLE_STMT RP
-	| POW LP DOUBLE_STMT COMMA INT_STMT RP
-	| POW LP DOUBLE_STMT COMMA DOUBLE_STMT RP
-
 constant_identifier:
 	CONST term
 
@@ -191,16 +188,16 @@ factor:
 	| LP arithmetic_operations RP
 
 max:
-	MAX LP INT_STMT COMMA INT_STMT RP 
-	| MAX LP DOUBLE_STMT COMMA DOUBLE_STMT RP
+	MAX LP arithmetic_operations COMMA arithmetic_operations RP 
 
 min:
-	MIN LP INT_STMT COMMA INT_STMT RP
-	| MIN LP DOUBLE_STMT RP COMMA DOUBLE_STMT RP
+	MIN LP arithmetic_operations COMMA arithmetic_operations RP
 
 sqrt:
-	SQUARE_ROOT LP INT_STMT RP
-	| SQUARE_ROOT LP DOUBLE_STMT RP
+	SQUARE_ROOT LP arithmetic_operations RP
+
+power: 
+	POW LP arithmetic_operations COMMA arithmetic_operations RP
 
 declaration: 
 	types term SEMICOLON
@@ -222,7 +219,7 @@ initialization:
 	|term assignment_operator function_call
 
 declaration_and_initialization:
-	types constant_identifier assignment_operator assignment_values SEMICOLON
+	types constant_identifier assignment_operator arithmetic_operations SEMICOLON
 	| types term assignment_operator arithmetic_operations SEMICOLON
 	| types term assignment_operator function_call
 
@@ -248,7 +245,7 @@ output_stmt:
 	EGG_OUT LP output_context RP SEMICOLON
 
 input_context: 
-	term PLUS input_context 
+	term COMMA input_context 
 	| term
 
 output_context: 

@@ -1,22 +1,9 @@
-1 + (a + 5);
 
-if( x == 5 &  (y != 31 | anan >= yarak) ) {
-	int a = 33;
+if( x == 1 ) {
+	double anan = 31;
 }
-
-
-if( (x == 5 &  y != 31) | anan >= yarak  ) {
-	string a = merhaba;
-}
-
-if((annecim  == 3) | (babacim == 2) ) {
-	anan = 31;
-}
-
-if((direction == "up") & (PLAYERX == 5) & (PLAYERY == 1) ) {
-	anan = 31;
-}
-
-if((((PLAYERX == 5) & (PLAYERY == 1)) | ((PLAYERY == 2) & (PLAYERX == 3)) | ((PLAYERY == 3) & (PLAYERX == 5 | PLAYERX == 2)) | ((PLAYERY == 4) & (PLAYERX == 4)) | ((PLAYERY == 5) & (PLAYERX == 2))) & direction == "up" ) {
-	int x = 31;
+else {##deneme
+##deneme
+	eggout(" yarrak " );
+	int b = 31;
 }
