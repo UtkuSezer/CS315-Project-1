@@ -275,4 +275,4 @@ int lineno;
 main() {
   return yyparse();
 }
-yyerror( char *s ) { fprintf(stderr, "line %d: %s\n", yylineno,s); };
+yyerror( char *s ) { fprintf(stderr,"%s on line: %d!\n",s, yylineno); };
