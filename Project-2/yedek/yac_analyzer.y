@@ -101,6 +101,8 @@ non_if_stmt:
 	| output_stmt
 	| COMMENT
 	| LINE_COMMENT
+	| RETURN arithmetic_operations SEMICOLON
+	| RETURN VOID SEMICOLON
 
 loops:
 	while_loop
@@ -257,10 +259,8 @@ output_context:
 
 function_declaration:
 	VOID IDENTIFIER LP parameter RP LCB stmts RCB 
-	| types IDENTIFIER LP parameter RP LCB stmts RETURN assignment_values SEMICOLON RCB
-	| types IDENTIFIER LP parameter RP LCB stmts RETURN term SEMICOLON RCB  
-	| VOID IDENTIFIER LP parameter RP LCB stmts RETURN VOID SEMICOLON RCB
-	| INT MAIN LP RP LCB stmts RETURN INT_STMT SEMICOLON RCB
+	| types IDENTIFIER LP parameter RP LCB stmts RCB  
+	| MAIN LP RP LCB stmts RCB
 
 parameter:
 	parameter COMMA types IDENTIFIER
