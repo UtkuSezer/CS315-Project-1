@@ -2,7 +2,8 @@
 if( x == 1 ) {
 	double anan = 31;
 }
-else {##deneme
+##deneme
+else {
 ##deneme
 	eggout(" yarrak " );
 	int b = 31;

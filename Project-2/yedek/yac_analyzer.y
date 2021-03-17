@@ -74,7 +74,7 @@
 %start program
 %%
 program:
-	stmts
+	stmts {printf("\rProgram is valid.\n");};
 
 stmts:
 	stmt | stmts stmt
@@ -275,5 +275,4 @@ int lineno;
 main() {
   return yyparse();
 }
-
-yyerror( char *s ) { fprintf( stderr, "line %d: %s\n", yylineno,s); };
+yyerror( char *s ) { fprintf(stderr, "line %d: %s\n", yylineno,s); };
