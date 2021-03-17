@@ -74,7 +74,7 @@
 %start program
 %%
 program:
-	stmts
+	stmts {printf("\rProgram is valid.\n");};
 
 stmts:
 	stmt | stmts stmt
@@ -101,6 +101,8 @@ non_if_stmt:
 	| output_stmt
 	| COMMENT
 	| LINE_COMMENT
+	| RETURN arithmetic_operations SEMICOLON
+	| RETURN VOID SEMICOLON
 
 loops:
 	while_loop
@@ -111,7 +113,7 @@ while_loop:
 	WHILE LP logical_expression RP LCB stmts RCB
 
 for_loop:
-	FOR LP loop_initialization logical_expression SEMICOLON arithmetic_operations RP LCB stmts RCB
+	FOR LP loop_initialization logical_expression SEMICOLON loop_arithmetic RP LCB stmts RCB
 
 do_while_loop:
 	DO LCB stmts RCB WHILE LP logical_expression RP SEMICOLON
@@ -120,18 +122,23 @@ loop_initialization:
 	initialization
 	| declaration_and_initialization
 
+ loop_arithmetic:
+	term assignment_operator arithmetic_operations
+
 logical_expression:
 	recursive_expression
 
-single_expression: 
-	term logical_operator term
-	|term logical_operator assignment_values 
-	| BOOL_STMT
-	| NOT BOOL_STMT
-
 recursive_expression: 
-	recursive_expression logical_connector single_expression 
-	| single_expression
+	single_expression
+	|recursive_expression logical_connector single_expression
+
+single_expression: 
+	term logical_operator arithmetic_operations
+	|LP logical_expression RP
+	| BOOL_STMT
+	| term
+	| NOT term
+	| NOT BOOL_STMT
 
 term:
 	var
@@ -169,35 +176,28 @@ divisionAndMultiplication:
 	|divisionAndMultiplication MULTIPLY_OP factor
 	| factor
  
-
 modulo:
 	factor MOD_OP factor
-
-power: 
-	POW LP INT_STMT COMMA INT_STMT RP
-	| POW LP INT_STMT COMMA DOUBLE_STMT RP
-	| POW LP DOUBLE_STMT COMMA INT_STMT RP
-	| POW LP DOUBLE_STMT COMMA DOUBLE_STMT RP
 
 constant_identifier:
 	CONST term
 
-
 factor:
-	LP term RP
-	| term
+	term
+	|assignment_values
+	| LP arithmetic_operations RP
 
 max:
-	MAX LP INT_STMT COMMA INT_STMT RP 
-	| MAX LP DOUBLE_STMT COMMA DOUBLE_STMT RP
+	MAX LP arithmetic_operations COMMA arithmetic_operations RP 
 
 min:
-	MIN LP INT_STMT COMMA INT_STMT RP
-	| MIN LP DOUBLE_STMT RP COMMA DOUBLE_STMT RP
+	MIN LP arithmetic_operations COMMA arithmetic_operations RP
 
 sqrt:
-	SQUARE_ROOT LP INT_STMT RP
-	| SQUARE_ROOT LP DOUBLE_STMT RP
+	SQUARE_ROOT LP arithmetic_operations RP
+
+power: 
+	POW LP arithmetic_operations COMMA arithmetic_operations RP
 
 declaration: 
 	types term SEMICOLON
@@ -208,26 +208,20 @@ types:
 
 function_call:
 	IDENTIFIER LP call_parameter RP SEMICOLON
+	|MOVE LP directions RP SEMICOLON
+	|MOVE LP directions COMMA INT_STMT RP SEMICOLON
 
-initialization: 
-	term assignment_operator args SEMICOLON
+directions:
+	WEST | SOUTH | EAST | NORTH
+
+initialization:
+	term assignment_operator arithmetic_operations SEMICOLON
+	|term assignment_operator function_call
 
 declaration_and_initialization:
-	types constant_identifier assignment_operator assignment_values SEMICOLON
-	| types term assignment_operator args SEMICOLON
-
-args:
-	args arithmetic_operators assignment_values
-	| args arithmetic_operators var
-	| var
-	| assignment_values
-
-arithmetic_operators:
-	PLUS
-	|MINUS
-	|MULTIPLY_OP
-	|DIVIDE_OP
-	|MOD_OP	
+	types constant_identifier assignment_operator arithmetic_operations SEMICOLON
+	| types term assignment_operator arithmetic_operations SEMICOLON
+	| types term assignment_operator function_call
 
 assignment_operator: 
 	ASSIGN_OP
@@ -251,7 +245,7 @@ output_stmt:
 	EGG_OUT LP output_context RP SEMICOLON
 
 input_context: 
-	term PLUS input_context 
+	term COMMA input_context 
 	| term
 
 output_context: 
@@ -262,10 +256,8 @@ output_context:
 
 function_declaration:
 	VOID IDENTIFIER LP parameter RP LCB stmts RCB 
-	| types IDENTIFIER LP parameter RP LCB stmts RETURN assignment_values SEMICOLON RCB
-	| types IDENTIFIER LP parameter RP LCB stmts RETURN term SEMICOLON RCB  
-	| VOID IDENTIFIER LP parameter RP LCB stmts RETURN VOID SEMICOLON RCB
-	| INT MAIN LP RP LCB stmts RETURN INT_STMT RCB
+	| types IDENTIFIER LP parameter RP LCB stmts RCB  
+	| MAIN LP RP LCB stmts RCB
 
 parameter:
 	parameter COMMA types IDENTIFIER
@@ -283,5 +275,4 @@ int lineno;
 main() {
   return yyparse();
 }
-
-yyerror( char *s ) { fprintf( stderr, "line %d: %s\n", yylineno,s); };
+yyerror( char *s ) { fprintf(stderr, "line %d: %s\n", yylineno,s); };

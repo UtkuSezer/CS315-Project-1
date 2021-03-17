@@ -59,7 +59,7 @@ void buyItems( int whealth, int heroDamage){
 	}
 }
 
-int main(){
+main(){
 	
 	## Variables
 	bool game = true;
@@ -157,8 +157,6 @@ int main(){
 			game = false;
 		}
 	}
-
-	eggout("Your score is " + ((2 * heroWhealth) + (3 * heroStrength)) + \n);
-
-	return 0;
+	int score = ((2 * heroWhealth) + (3 * heroStrength));
+	eggout("Your score is " + score + \n);
 }

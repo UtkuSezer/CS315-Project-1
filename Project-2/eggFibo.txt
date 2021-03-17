@@ -1,5 +1,3 @@
-begin
-
 # 
 Fibonacci Calculator
 		by Apocalyptic Games
@@ -7,7 +5,7 @@ Written in Egg Language
 Date: 28.02.2021
 #
 
-int funct_calculateFibo(int n){
+int calculateFibo(int n){
 
 	int first_number = 0;
 	int second_number = 1;
@@ -23,9 +21,9 @@ int funct_calculateFibo(int n){
 				return 1;
 			}
 		}
-		##Calculating Fibonacci number
-		else{ 
-			for( int i = 2; i < n ; i = i + 1 ){
+		else{
+			##Calculating Fibonacci number
+			for( int i = 2; i < n ; i += 1 ){
 				newNumber = first_number + second_number;
 				first_number = second_number;
 				second_number = newNumber;
@@ -33,26 +31,28 @@ int funct_calculateFibo(int n){
 			return newNumber;
 		}
 	}
-	##Invalid input
 	else{
+		##Invalid input
 		return -1;
 	}
 }
   
-int funct_main(){
+main(){
 
 	int n;
 	int choice;
 	bool exit;
 	string input;
-	int numb1, numb2;
-	int maxNumb, minNumb;
+	int numb1;
+	int numb2;
+	int maxNumb; 
+	int minNumb;
 	int powResult;
 
 	eggout("Welcome to Fibonacci number calculator! Please enter your name to start: ");
 	eggin(input);
 
-	const string name = input;
+	string const name = input;
 
 	eggout(\n + "Hello " + name + " !" + \n );
 
@@ -71,8 +71,9 @@ int funct_main(){
 		eggout("Please enter a number 'n' to get n'th Fibonacci number: ");
 		eggin(n);
 		eggout(\n + "*******************************************************" + \n);
+		int x = calculateFibo(n);
 
-		if( funct_calculateFibo(n) == -1 ){
+		if( x == -1 ){
 			eggout("Invalid input! " + \n);
 		}
 		else{
@@ -101,5 +102,3 @@ int funct_main(){
 
 	eggout("Bye " + name + "!" );
 }
-
-end
